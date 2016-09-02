@@ -80,7 +80,7 @@ class RoboFile extends \Robo\Tasks
         $this->_exec('php app/console doctrine:schema:create');
 
         # creates the admin account and role
-        $this->_exec('php app/console doctrine:fixtures:load --fixtures plugins/HubsCoreBundle/InstallFixtures --no-interaction');
+        $this->_exec('php app/console doctrine:fixtures:load --fixtures=app/bundles/InstallBundle/InstallFixtures/ --fixtures=plugins/HubsCoreBundle/InstallFixtures/ --no-interaction');
 
     }
 
