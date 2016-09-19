@@ -122,5 +122,3 @@ if (isset($mauticParams['site_url'])) {
 }
 
 unset($mauticParams, $replaceRootPlaceholder, $bundles);
-
-$container->setParameter('mautic.security.disableUpdates', true);
