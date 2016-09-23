@@ -43,12 +43,14 @@ class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, C
         $role       = new Role();
         $role->setName('Marketeer');
         $role->setDescription('Der ausführende Marketeer kann eigene Kampagnen planen und durchführen');
+        $role->setRawPermissions(unserialize('a:16:{s:16:"asset:categories";a:1:{i:0;s:4:"full";}s:12:"asset:assets";a:1:{i:0;s:4:"full";}s:19:"campaign:categories";a:1:{i:0;s:4:"full";}s:18:"campaign:campaigns";a:1:{i:0;s:4:"full";}s:19:"category:categories";a:1:{i:0;s:4:"view";}s:10:"lead:leads";a:1:{i:0;s:4:"full";}s:10:"lead:lists";a:1:{i:0;s:9:"viewother";}s:16:"email:categories";a:1:{i:0;s:4:"full";}s:12:"email:emails";a:1:{i:0;s:4:"full";}s:15:"form:categories";a:1:{i:0;s:4:"full";}s:10:"form:forms";a:1:{i:0;s:4:"full";}s:15:"page:categories";a:1:{i:0;s:4:"full";}s:10:"page:pages";a:1:{i:0;s:4:"full";}s:12:"point:points";a:1:{i:0;s:4:"view";}s:14:"point:triggers";a:1:{i:0;s:4:"view";}s:14:"report:reports";a:2:{i:0;s:7:"viewown";i:1;s:9:"viewother";}}'));
         $role->setIsAdmin(0);
         $manager->persist($role);
 
         $role       = new Role();
         $role->setName('Supermarketeer');
         $role->setDescription('Superuser Marketing für die Verwaltung aller Marketing Features, nicht aber der Benutzerverwaltung');
+        $role->setRawPermissions(unserialize('a:18:{s:16:"asset:categories";a:1:{i:0;s:4:"full";}s:12:"asset:assets";a:1:{i:0;s:4:"full";}s:19:"campaign:categories";a:1:{i:0;s:4:"full";}s:18:"campaign:campaigns";a:1:{i:0;s:4:"full";}s:19:"category:categories";a:1:{i:0;s:4:"full";}s:10:"lead:leads";a:1:{i:0;s:4:"full";}s:10:"lead:lists";a:1:{i:0;s:4:"full";}s:11:"lead:fields";a:1:{i:0;s:4:"full";}s:16:"email:categories";a:1:{i:0;s:4:"full";}s:12:"email:emails";a:1:{i:0;s:4:"full";}s:15:"form:categories";a:1:{i:0;s:4:"full";}s:10:"form:forms";a:1:{i:0;s:4:"full";}s:15:"page:categories";a:1:{i:0;s:4:"full";}s:10:"page:pages";a:1:{i:0;s:4:"full";}s:16:"point:categories";a:1:{i:0;s:4:"full";}s:12:"point:points";a:1:{i:0;s:4:"full";}s:14:"point:triggers";a:1:{i:0;s:4:"full";}s:14:"report:reports";a:1:{i:0;s:4:"full";}}'));
         $role->setIsAdmin(0);
         $manager->persist($role);
 
