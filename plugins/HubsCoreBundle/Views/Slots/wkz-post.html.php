@@ -62,7 +62,7 @@
                                                                      align="center">
                                                                     <a href="http://www.google.com">
                                                                         <img
-                                                                            src="<?php echo $view['assets']->getUrl('themes/blank.png', null, null, true); ?>"
+                                                                            src="http://placehold.it/191x175"
                                                                             alt="An image"/>
                                                                     </a>
                                                                 </div>

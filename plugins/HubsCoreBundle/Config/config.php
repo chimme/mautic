@@ -17,7 +17,8 @@ return [
     'services' => [
         'events' => [
             'mautic.hubs.emailbuilder.subscriber' => [
-                'class' => 'MauticPlugin\HubsCoreBundle\EventListener\BuilderSubscriber',
+                'class'     => 'MauticPlugin\HubsCoreBundle\EventListener\BuilderSubscriber',
+                'arguments' => 'mautic.helper.theme',
             ],
         ],
     ],
