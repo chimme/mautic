@@ -12,7 +12,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>Mautic</title>
+    <title>55 hubs - by 55 weeks</title>
     <meta name="robots" content="noindex, nofollow" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="icon" type="image/x-icon" href="<?php echo $view['assets']->getUrl('media/images/favicon.ico') ?>" />
