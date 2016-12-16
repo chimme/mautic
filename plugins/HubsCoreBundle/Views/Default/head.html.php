@@ -19,12 +19,41 @@
     <?php $view['assets']->outputHeadDeclarations(); ?>
 
     <script>
-        (function(t,a,l,k,u,s,e){if(!t[u]){t[u]=function(){(t[u].q=t[u].q||[]).push(arguments)},t[u].l=1*new Date();s=a.createElement(l),e=a.getElementsByTagName(l)[0];s.async=1;s.src=k;e.parentNode.insertBefore(s,e)}})(window,document,'script','//www.talkus.io/plugin.js','talkus');
-        talkus('primaryColor', '#009ba0', '#006d70');
-        talkus('hide');
-        talkus('loadingImage', 'http://www.55weeks.ch/wp-content/uploads/2015/10/55_weeks_Logo_46px.png');
-        talkus('identify', { id: '<?php echo $app->getUser()->getUsername();?>', name: '<?php echo $app->getUser()->getName();?>', email: '<?php echo $app->getUser()->getEmail();?>' })
-        talkus('welcomeMessage', ':wave: Hallo <?php echo $app->getUser()->getFirstName();?>! Wie können wir Dir helfen?');
-        talkus('create', 'qhmAwqHXMQeEy8oyK');
+        if (typeof Mautic !== 'undeined' && typeof mQuery !== 'undeined') {
+            Mautic.generatePageTitle = function (route) {
+                if (-1 !== route.indexOf('view')) {
+                    //loading view of module title
+                    var currentModule = route.split('/')[3];
+
+                    //check if we find spans
+                    var titleWithHTML = mQuery('.page-header h3').find('span.span-block');
+                    var currentModuleItem = '';
+
+                    if (1 < titleWithHTML.length) {
+                        currentModuleItem = titleWithHTML.eq(0).text() + ' - ' + titleWithHTML.eq(1).text();
+                    } else {
+                        currentModuleItem = mQuery('.page-header h3').text();
+                    }
+
+                    mQuery('title').html(currentModule[0].toUpperCase() + currentModule.slice(1) + ' | ' + currentModuleItem + ' | 55 hubs - by 55 weeks');
+                } else {
+                    //loading basic title
+                    mQuery('title').html(mQuery('.page-header h3').html() + ' | 55 hubs - by 55 weeks');
+                }
+            };
+        }
+        (function(t,a,l,k,u,s,e){if(!t[u]){t[u]=function(){(t[u].q=t[u].q||[]).push(arguments)},t[u].l=1*new Date();s=a.createElement(l),e=a.getElementsByTagName(l)[0];s.async=1;s.src=k;e.parentNode.insertBefore(s,e)}})(window,document,'script','//www.talkus.io/plugin.beta.js','talkus');
+        talkus('init', 'qhmAwqHXMQeEy8oyK', {
+            id: '<?php echo $app->getUser()->getUsername();?>',
+            name: '<?php echo $app->getUser()->getName();?>',
+            email: '<?php echo $app->getUser()->getEmail();?>'
+        })
     </script>
+    <style>
+        div.talkus-plugin.talkus-active.talkus-minimized {
+            transform: none !important;
+            -webkit-transform: none !important;
+            -ms-transform: none !important;
+        }
+    </style>
 </head>
