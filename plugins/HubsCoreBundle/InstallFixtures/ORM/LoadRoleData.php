@@ -60,6 +60,20 @@ class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, C
         $role->setIsAdmin(0);
         $manager->persist($role);
 
+        $role = new Role();
+        $role->setName('Kundenbeziehung');
+        $role->setDescription('Unterstützende Rolle für die Pflege von Kundenbeziehungen, Event Hostessen oder Call Center Mitarbeiter');
+        $role->setRawPermissions(unserialize('a:5:{s:16:"asset:categories";a:1:{i:0;s:4:"view";}s:12:"asset:assets";a:2:{i:0;s:7:"viewown";i:1;s:9:"viewother";}s:10:"lead:leads";a:2:{i:0;s:7:"viewown";i:1;s:9:"viewother";}s:10:"lead:lists";a:1:{i:0;s:9:"viewother";}s:14:"report:reports";a:2:{i:0;s:7:"viewown";i:1;s:9:"viewother";}}'));
+        $role->setIsAdmin(0);
+        $manager->persist($role);
+
+        $role = new Role();
+        $role->setName('API');
+        $role->setDescription('API Vollzugriff');
+        $role->setRawPermissions(unserialize('a:2:{s:10:"api:access";a:1:{i:0;s:4:"full";}s:11:"api:clients";a:1:{i:0;s:4:"full";}}'));
+        $role->setIsAdmin(0);
+        $manager->persist($role);
+
         $manager->flush();
     }
 

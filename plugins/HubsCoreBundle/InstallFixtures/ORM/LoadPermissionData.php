@@ -330,6 +330,45 @@ class LoadPermissionData extends AbstractFixture implements OrderedFixtureInterf
                             'bitwise' => 1024,
                         ],
             ],
+            '5' => [
+                        [
+                            'bundle'  => 'asset',
+                            'name'    => 'categories',
+                            'bitwise' => 4,
+                        ],
+                        [
+                            'bundle'  => 'asset',
+                            'name'    => 'assets',
+                            'bitwise' => 6,
+                        ],
+                        [
+                            'bundle'  => 'lead',
+                            'name'    => 'leads',
+                            'bitwise' => 6,
+                        ],
+                        [
+                            'bundle'  => 'lead',
+                            'name'    => 'lists',
+                            'bitwise' => 2,
+                        ],
+                        [
+                            'bundle'  => 'report',
+                            'name'    => 'reports',
+                            'bitwise' => 6,
+                        ],
+            ],
+            '6' => [
+                        [
+                            'bundle'  => 'api',
+                            'name'    => 'access',
+                            'bitwise' => 1024,
+                        ],
+                        [
+                            'bundle'  => 'api',
+                            'name'    => 'clients',
+                            'bitwise' => 1024,
+                        ],
+            ],
         ];
 
         foreach ($datas as $key => $value) {
