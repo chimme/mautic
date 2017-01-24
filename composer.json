@@ -102,7 +102,7 @@
         "php-http/guzzle6-adapter": "^1.1",
         "sparkpost/sparkpost": "~2.0.3",
         "doctrine/data-fixtures": "1.2.1",
-        "facebook/php-ads-sdk": "2.8.*"
+        "facebook/php-ads-sdk": "^2.8"
     },
     "require-dev": {
         "symfony/web-profiler-bundle": "~2.8",
