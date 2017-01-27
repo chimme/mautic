@@ -7,7 +7,6 @@ use FacebookAds\Object\Fields\CustomAudienceFields;
 use FacebookAds\Object\Values\CustomAudienceSubtypes;
 use FacebookAds\Object\Values\CustomAudienceTypes;
 use Mautic\CoreBundle\Controller\FormController;
-use MauticPlugin\HubsFacebookAdsBundle\Form\AddCustomAudienceType;
 
 /**
  * Description of TestController.
@@ -40,6 +39,7 @@ class CustomAudienceController extends FormController
             \FacebookAds\Object\Fields\CustomAudienceFields::NAME,
             \FacebookAds\Object\Fields\CustomAudienceFields::TIME_CREATED,
             \FacebookAds\Object\Fields\CustomAudienceFields::TIME_UPDATED,
+            \FacebookAds\Object\Fields\CustomAudienceFields::DELIVERY_STATUS,
         ];
         $adAccount = new \FacebookAds\Object\AdAccount($adAccountId);
         try {
@@ -76,19 +76,18 @@ class CustomAudienceController extends FormController
         if (!$this->get('mautic.security')->isGranted('facebookAds:addvertising:manage')) {
             return $this->accessDenied();
         }
-        $data   = [];
-        $action = $this->generateUrl('hubs_fb_ca_action', ['objectAction' => 'new']);
-        $form   = $this->createForm(AddCustomAudienceType::class, $data, [
-            'action' => $action,
-        ]);
+        $action         = $this->generateUrl('hubs_fb_ca_action', ['objectAction' => 'new']);
+        $model          = $this->getModel('hubs.fbads.model.customaudiance');
+        $CustomAudience = $model->getEntity();
+        //get the user form factory
+        $form = $model->createForm($CustomAudience, $this->get('form.factory'), $action);
         ///Check for a submitted form and process it
         if ($this->request->getMethod() == 'POST') {
             $valid = false;
             if (!$cancelled = $this->isFormCancelled($form)) {
                 if ($valid = $this->isFormValid($form)) {
-                    $listModal = $this->get('mautic.lead.model.list');
-                    $listId    = $form['addToLists']->getData();
-                    $listObj   = $listModal->getEntity($listId);
+                    $listId    = $CustomAudience->getList()->getId();
+                    $listObj   = $CustomAudience->getList();
                     $apiHelper = $this->get('hubs.fbads.helper');
                     $session   = $apiHelper->getApi()->getSession();
                     if (!$session->isValidSession()) {
@@ -99,7 +98,7 @@ class CustomAudienceController extends FormController
                     $audience->setData([
                         CustomAudienceFields::NAME        => $listObj->getName(),
                         CustomAudienceFields::SUBTYPE     => CustomAudienceSubtypes::CUSTOM,
-                        CustomAUdienceFields::DESCRIPTION => $listObj->getDescription(),
+                        CustomAUdienceFields::DESCRIPTION => $CustomAudience->getDescription() ?? $listObj->getDescription(),
                     ]);
 
                     try {
@@ -107,15 +106,17 @@ class CustomAudienceController extends FormController
                     } catch (\Exception $ex) {
                         return $this->renderFacebookAdsException();
                     }
-
-                    $list       = $listModal->getLeadsByList($listId);
-                    $leadsEmail = [];
-                    foreach ($list[$listId] as $leads) {
-                        if ($leads['email']) {
-                            $leadsEmail[] = $leads['email'];
-                        }
-                    }
-                    $audience->addUsers($leadsEmail, CustomAudienceTypes::EMAIL);
+                    $CustomAudience->setName($listObj->getName());
+                    $CustomAudience->setCustomAudienceId($audience->__get('id'));
+                    $model->saveEnity($CustomAudience);
+//                    $list = $model->getLeadsByList($listId);
+//                    $leadsEmail = [];
+//                    foreach ($list[$listId] as $leads) {
+//                        if ($leads['email']) {
+//                            $leadsEmail[] = $leads['email'];
+//                        }
+//                    }
+//                    $audience->addUsers($leadsEmail, CustomAudienceTypes::EMAIL);
                     $returnUrl = $this->generateUrl('hubs_fb_ca_index');
                     $template  = 'HubsFacebookAdsBundle:CustomAudience:index';
                 }

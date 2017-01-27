@@ -79,6 +79,14 @@ $view['slots']->set(
                         'default' => true,
                     ]
                 );
+                echo $view->render(
+                    'MauticCoreBundle:Helper:tableheader.html.php',
+                    [
+                        'text'    => 'hubs.fbAds.status',
+                        'class'   => 'col-form-name',
+                        'default' => true,
+                    ]
+                );
                 ?>
             </tr>
             </thead>
@@ -107,8 +115,24 @@ $view['slots']->set(
                     <td class="visible-md visible-lg">
                             <?php echo $item['name']; ?>
                     </td>
-                    <td class="visible-md visible-lg"><?php echo  $view['date']->toDate(new DateTime('@'.$item['time_created'])); ?></td>
-                    <td class="visible-md visible-lg"><?php echo  $view['date']->toDate(new DateTime('@'.$item['time_updated'])); ?></td>
+                    <td class="visible-md visible-lg"><?php echo  $view['date']->toFull(new DateTime('@'.$item['time_created'])); ?></td>
+                    <td class="visible-md visible-lg"><?php echo  $view['date']->toFull(new DateTime('@'.$item['time_updated'])); ?></td>
+                    <td class="visible-md visible-lg">
+                                <?php
+                                if (isset($item['delivery_status'])) {
+                                    switch ($item['delivery_status']['code']) {
+                                        case 200:
+                                            echo 'Active';
+                                            break;
+                                        case 300:
+                                            echo "Inactive  <span data-toggle=\"tooltip\" title=\"{$item['delivery_status']['description']}\"><i class=\"fa fa-question-circle\"></i></span>";
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                                ?>
+                            </td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

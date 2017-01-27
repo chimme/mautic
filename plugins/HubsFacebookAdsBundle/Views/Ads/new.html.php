@@ -18,7 +18,8 @@ $view['slots']->set('headerTitle', $view['translator']->trans('hubs.fbAds.custom
         <div class="pr-lg pl-lg pt-md pb-md">
             <div class="col-md-6">
                 <?php
-                echo $view['form']->row($form['addToLists']);
+                echo $view['form']->row($form['list']);
+                echo $view['form']->row($form['description']);
                 ?>
             </div>
         </div>

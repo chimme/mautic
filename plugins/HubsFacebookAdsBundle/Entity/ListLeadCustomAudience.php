@@ -20,9 +20,9 @@ use Mautic\CoreBundle\Doctrine\Mapping\ClassMetadataBuilder;
 class ListLeadCustomAudience
 {
     /**
-     * @var LeadList
+     * @var Lead
      * */
-    private $list;
+    private $lead;
 
     /**
      * @var Lead
@@ -30,9 +30,19 @@ class ListLeadCustomAudience
     private $customAudience;
 
     /**
+     * @var string
+     */
+    private $email;
+
+    /**
      * @var \DateTime
      */
     private $dateAdded;
+
+    /**
+     * @var int
+     */
+    private $isRemoved;
 
     /**
      * @param ORM\ClassMetadata $metadata
@@ -44,15 +54,17 @@ class ListLeadCustomAudience
         $builder->setTable('custom_audience_lead_list')
                 ->setCustomRepositoryClass('MauticPlugin\HubsFacebookAdsBundle\Entity\ListLeadCustomAudienceRepository');
 
-        $builder->createManyToOne('list', 'Mautic\LeadBundle\Entity\LeadList')
-                ->isPrimaryKey()
-                ->addJoinColumn('leadlist_id', 'id', false, false, 'CASCADE')
-                ->build();
-
         $builder->createManyToOne('customAudience', 'MauticPlugin\HubsFacebookAdsBundle\Entity\CustomAudience')
-                ->addJoinColumn('custom_audience_id', 'id', false, false, 'CASCADE')
+                ->isPrimaryKey()
+                ->addJoinColumn('custom_audience_id', 'id', false, false, 'NO ACTION')
                 ->build();
 
+        $builder->addLead(false, 'NO ACTION', true);
+        $builder->createField('email', 'string')
+                ->build();
+        $builder->createField('isRemoved', 'boolean')
+                ->columnName('is_removed')
+                ->build();
         $builder->addDateAdded();
     }
 
@@ -99,8 +111,42 @@ class ListLeadCustomAudience
     /**
      * @param LeadList $leadList
      */
-    public function setList($leadList)
+    public function setLead($lead)
     {
-        $this->list = $leadList;
+        $this->lead = $lead;
+    }
+
+    /**
+     * @return email
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIsRemoved()
+    {
+        return $this->isRemoved;
+    }
+
+    /**
+     * @param $removed
+     */
+    public function setIsRemoved($removed)
+    {
+        $this->isRemoved = $removed;
+
+        return $this;
     }
 }

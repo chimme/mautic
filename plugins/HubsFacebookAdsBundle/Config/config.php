@@ -10,6 +10,12 @@ return [
             'mautic.hubs.menubuilder.subscriber' => [
                 'class' => 'MauticPlugin\HubsFacebookAdsBundle\EventListener\MenuSubscriber',
             ],
+            'mautic.hubs.lead.subscriber' => [
+                'class' => 'MauticPlugin\HubsFacebookAdsBundle\EventListener\LeadSubscriber',
+            ],
+            'mautic.hubs.custom_audiance.subscriber' => [
+                'class' => 'MauticPlugin\HubsFacebookAdsBundle\EventListener\CustomAudianceSubscriber',
+            ],
         ],
         'others' => [
             'hubs.fbads.helper' => [
@@ -19,6 +25,14 @@ return [
                 ],
                 'methodCalls' => [
                     'init' => ['%kernel.environment%', '%kernel.cache_dir%'],
+                ],
+            ],
+        ],
+        'models' => [
+            'hubs.fbads.model.customaudiance' => [
+                'class'     => 'MauticPlugin\HubsFacebookAdsBundle\Model\CustomAudienceModel',
+                'arguments' => [
+                    'mautic.helper.core_parameters',
                 ],
             ],
         ],

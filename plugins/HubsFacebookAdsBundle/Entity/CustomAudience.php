@@ -27,9 +27,19 @@ class CustomAudience extends CommonEntity
     private $id;
 
     /**
+     * @var
+     */
+    private $list;
+
+    /**
      * @var string
      */
     private $name;
+
+    /**
+     * @var string
+     */
+    private $description;
 
     /**
      * @var int
@@ -43,14 +53,15 @@ class CustomAudience extends CommonEntity
     {
         $builder = new ClassMetadataBuilder($metadata);
         $builder->setTable('custom_audience')
-                ->setCustomRepositoryClass('MauticPlugin\HubsFacebookAdsBundle\Entity\CustomAudienceRepository')
-                ->addIndex(['custom_audience_id'], 'custom_audiance_search');
+                ->setCustomRepositoryClass('MauticPlugin\HubsFacebookAdsBundle\Entity\CustomAudienceRepository');
 
-        $builder->addId();
-        $builder->addField('name', 'string');
-        $builder->createField('customAudienceId', 'boolean')
-            ->columnName('custom_audience_id')
-            ->build();
+        $builder->addIdColumns();
+        $builder->createField('customAudienceId', 'string')
+                ->columnName('custom_audience_id')
+                ->build();
+        $builder->createManyToOne('list', 'Mautic\LeadBundle\Entity\LeadList')
+                ->addJoinColumn('leadlist_id', 'id', false, false, 'NO ACTION')
+                ->build();
     }
 
     /**
@@ -97,6 +108,26 @@ class CustomAudience extends CommonEntity
     }
 
     /**
+     * @return int
+     */
+    public function getList()
+    {
+        return $this->list;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Name
+     */
+    public function setList(\Mautic\LeadBundle\Entity\LeadList $list)
+    {
+        $this->list = $list;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getCustomAudienceId()
@@ -112,6 +143,26 @@ class CustomAudience extends CommonEntity
     public function setCustomAudienceId($customAudienceId)
     {
         $this->customAudienceId = $customAudienceId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return Tag
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
 
         return $this;
     }
