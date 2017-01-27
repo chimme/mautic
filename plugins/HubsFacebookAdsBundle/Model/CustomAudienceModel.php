@@ -274,7 +274,7 @@ class CustomAudienceModel extends FormModel
 
                 // Dispatch batch event
                 if ($this->dispatcher->hasListeners(CustomAudianceEvents::CUSTOM_AUDIENCE_REMOVE)) {
-                    $event = new ListChangeEvent($removeLeadList[$listId], $entity, false);
+                    $event = new CustomAudianceChangeEvent($removeLeadList[$listId], $entity, false);
                     $this->dispatcher->dispatch(CustomAudianceEvents::CUSTOM_AUDIENCE_REMOVE, $event);
 
                     unset($event);
@@ -395,9 +395,9 @@ class CustomAudienceModel extends FormModel
     public function removeLeadsFromCustomAudience($leadList, $customAudience)
     {
         if (!$leadList instanceof \MauticPlugin\HubsFacebookAdsBundle\Entity\ListLeadCustomAudience) {
-            $leadId = (is_array($leadList) && isset($leadList['id'])) ? $leadList['id'] : $leadList;
+            $leadListId = (is_array($leadList) && isset($leadList['id'])) ? $leadList['id'] : $leadList;
         } else {
-            $leadId = $leadList->getLead()->getId();
+            $leadListId = $leadList->getId();
         }
 
         if (!$customAudience instanceof CustomAudience) {
@@ -447,10 +447,7 @@ class CustomAudienceModel extends FormModel
                 continue;
             }
 
-            $listLead = $this->getListLeadCustomAudienceRepository()->findOneBy([
-                'lead'           => $leadId,
-                'customAudience' => $this->customAudienceLists[$customAudienceId],
-            ]);
+            $listLead = $this->getListLeadCustomAudienceRepository()->findOneById($leadListId);
 
             if ($listLead == null) {
                 // Lead is not part of this list
@@ -463,7 +460,7 @@ class CustomAudienceModel extends FormModel
         }
 
         if (!empty($deleteLists)) {
-            $this->getRepository()->deleteEntities($deleteLists);
+            $this->getListLeadCustomAudienceRepository()->deleteEntities($deleteLists);
         }
 
         // Clear ListLead entities from Doctrine memory

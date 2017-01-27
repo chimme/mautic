@@ -20,6 +20,11 @@ use Mautic\CoreBundle\Doctrine\Mapping\ClassMetadataBuilder;
 class ListLeadCustomAudience
 {
     /**
+     * @var id
+     * */
+    private $id;
+
+    /**
      * @var Lead
      * */
     private $lead;
@@ -51,21 +56,26 @@ class ListLeadCustomAudience
     {
         $builder = new ClassMetadataBuilder($metadata);
 
+        $builder->addId();
         $builder->setTable('custom_audience_lead_list')
                 ->setCustomRepositoryClass('MauticPlugin\HubsFacebookAdsBundle\Entity\ListLeadCustomAudienceRepository');
 
         $builder->createManyToOne('customAudience', 'MauticPlugin\HubsFacebookAdsBundle\Entity\CustomAudience')
-                ->isPrimaryKey()
-                ->addJoinColumn('custom_audience_id', 'id', false, false, 'NO ACTION')
+                ->addJoinColumn('custom_audience_id', 'id', false, false, 'CASCADE')
                 ->build();
 
-        $builder->addLead(false, 'NO ACTION', true);
+        $builder->addLead(false, 'NO ACTION', false);
         $builder->createField('email', 'string')
                 ->build();
         $builder->createField('isRemoved', 'boolean')
                 ->columnName('is_removed')
                 ->build();
         $builder->addDateAdded();
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

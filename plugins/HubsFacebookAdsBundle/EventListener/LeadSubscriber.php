@@ -21,7 +21,7 @@ class LeadSubscriber extends CommonSubscriber
     {
         $lead = $event->getLead();
         $list = $event->getList();
-        if (!$event->wasAdded()) {
+        if ($event->wasAdded()) {
             return;
         }
         $listId = (is_object($list)) ? $list->getId() : $list;

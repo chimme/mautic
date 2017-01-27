@@ -50,8 +50,7 @@ class ListLeadCustomAudienceRepository extends CommonRepository
             } else {
                 $select = 'l.*';
             }
-            $query->select($select)
-            ;
+            $query->select($select);
             if ($newOnly) {
                 $query->from(MAUTIC_TABLE_PREFIX.'leads', 'l')
                         ->join('l', MAUTIC_TABLE_PREFIX.'lead_lists_leads', 'll', $query->expr()->eq('ll.lead_id', 'l.id'))
@@ -74,7 +73,7 @@ class ListLeadCustomAudienceRepository extends CommonRepository
                 $query->from(MAUTIC_TABLE_PREFIX.'custom_audience_lead_list', 'l')
                         ->join('l', MAUTIC_TABLE_PREFIX.'custom_audience', 'ca', $query->expr()->eq('ca.id', 'l.custom_audience_id'));
                 $expr = $query->expr()->andX(
-                        $query->expr()->eq('ca.id', ':customAudienceId'), $query->expr()->eq('cs.is_removed', 1)
+                        $query->expr()->eq('ca.id', ':customAudienceId'), $query->expr()->eq('l.is_removed', 1)
                 );
                 $query->setParameter('customAudienceId', (int) $id);
                 $query->where($expr);
@@ -110,7 +109,7 @@ class ListLeadCustomAudienceRepository extends CommonRepository
         if ($listId) {
             $customAudiance = $this->getEntityManager()->getRepository('HubsFacebookAdsBundle:CustomAudience')
                     ->findOneByList($listId);
-            if ($customAudiance) {
+            if (!$customAudiance) {
                 return;
             }
         }

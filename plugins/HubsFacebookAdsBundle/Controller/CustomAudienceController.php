@@ -5,7 +5,6 @@ namespace MauticPlugin\HubsFacebookAdsBundle\Controller;
 use FacebookAds\Object\CustomAudience;
 use FacebookAds\Object\Fields\CustomAudienceFields;
 use FacebookAds\Object\Values\CustomAudienceSubtypes;
-use FacebookAds\Object\Values\CustomAudienceTypes;
 use Mautic\CoreBundle\Controller\FormController;
 
 /**
@@ -77,7 +76,7 @@ class CustomAudienceController extends FormController
             return $this->accessDenied();
         }
         $action         = $this->generateUrl('hubs_fb_ca_action', ['objectAction' => 'new']);
-        $model          = $this->getModel('hubs.fbads.model.customaudiance');
+        $model          = $this->get('hubs.fbads.model.customaudiance');
         $CustomAudience = $model->getEntity();
         //get the user form factory
         $form = $model->createForm($CustomAudience, $this->get('form.factory'), $action);
@@ -108,15 +107,7 @@ class CustomAudienceController extends FormController
                     }
                     $CustomAudience->setName($listObj->getName());
                     $CustomAudience->setCustomAudienceId($audience->__get('id'));
-                    $model->saveEnity($CustomAudience);
-//                    $list = $model->getLeadsByList($listId);
-//                    $leadsEmail = [];
-//                    foreach ($list[$listId] as $leads) {
-//                        if ($leads['email']) {
-//                            $leadsEmail[] = $leads['email'];
-//                        }
-//                    }
-//                    $audience->addUsers($leadsEmail, CustomAudienceTypes::EMAIL);
+                    $model->saveEntity($CustomAudience);
                     $returnUrl = $this->generateUrl('hubs_fb_ca_index');
                     $template  = 'HubsFacebookAdsBundle:CustomAudience:index';
                 }

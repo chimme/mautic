@@ -3,8 +3,9 @@
 namespace MauticPlugin\HubsFacebookAdsBundle\Event;
 
 use MauticPlugin\HubsFacebookAdsBundle\Entity\CustomAudience;
+use Symfony\Component\EventDispatcher\Event;
 
-class CustomAudianceChangeEvent
+class CustomAudianceChangeEvent extends Event
 {
     private $lead;
     private $leads;
