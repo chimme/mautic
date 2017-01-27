@@ -29,7 +29,7 @@ $view['slots']->set(
 
 ?>
 <div class="panel panel-default bdr-t-wdh-0 mb-0">
-<?php if (count($items)): ?>
+<?php if (count($customAudiance)): ?>
     <div class="table-responsive">
         <table class="table table-hover table-striped table-bordered" id="formTable">
             <thead>
@@ -91,7 +91,9 @@ $view['slots']->set(
             </tr>
             </thead>
             <tbody>
-            <?php  foreach ($items as $item):  ?>
+            <?php  foreach ($customAudiance as $item):
+                $apiDataItem = $apiData[$item->getCustomAudienceId()];
+                ?>
                 <tr>
                      <td>
                         <?php
@@ -111,21 +113,21 @@ $view['slots']->set(
                         );
                         ?>
                     </td>
-                    <td class="visible-md visible-lg"><?php echo  $item['id']; ?></td>
+                    <td class="visible-md visible-lg"><?php echo  $item->getId(); ?></td>
                     <td class="visible-md visible-lg">
-                            <?php echo $item['name']; ?>
+                            <?php echo $item->getName(); ?>
                     </td>
-                    <td class="visible-md visible-lg"><?php echo  $view['date']->toFull(new DateTime('@'.$item['time_created'])); ?></td>
-                    <td class="visible-md visible-lg"><?php echo  $view['date']->toFull(new DateTime('@'.$item['time_updated'])); ?></td>
+                    <td class="visible-md visible-lg"><?php echo  $view['date']->toFull(new DateTime('@'.$apiDataItem['time_created'])); ?></td>
+                    <td class="visible-md visible-lg"><?php echo  $view['date']->toFull(new DateTime('@'.$apiDataItem['time_updated'])); ?></td>
                     <td class="visible-md visible-lg">
                                 <?php
-                                if (isset($item['delivery_status'])) {
-                                    switch ($item['delivery_status']['code']) {
+                                if (isset($apiDataItem['delivery_status'])) {
+                                    switch ($apiDataItem['delivery_status']['code']) {
                                         case 200:
                                             echo 'Active';
                                             break;
                                         case 300:
-                                            echo "Inactive  <span data-toggle=\"tooltip\" title=\"{$item['delivery_status']['description']}\"><i class=\"fa fa-question-circle\"></i></span>";
+                                            echo "Inactive  <span data-toggle=\"tooltip\" title=\"{$apiDataItem['delivery_status']['description']}\"><i class=\"fa fa-question-circle\"></i></span>";
                                             break;
                                         default:
                                             break;

@@ -27,6 +27,7 @@ class CustomAudienceController extends FormController
         if (!$permissions['facebookAds:addvertising:view']) {
             return $this->accessDenied();
         }
+        $modal     = $this->get('hubs.fbads.model.customaudiance');
         $apiHelper = $this->get('hubs.fbads.helper');
         $session   = $apiHelper->getApi()->getSession();
         if (!$session->isValidSession()) {
@@ -47,14 +48,18 @@ class CustomAudienceController extends FormController
             return $this->renderFacebookAdsException();
         }
         $customAudianceArray = $result->getObjects();
+        $apiData             = [];
         foreach ($customAudianceArray as $tempData) {
-            $data[] = $tempData->getData();
+            $tmpData                 = $tempData->getData();
+            $apiData[$tmpData['id']] = $tempData->getData();
         }
+        $customAudiance = $modal->getEntities();
         $viewParameters = [
-            'route'       => 'hubs_fb_ca_action',
-            'items'       => $data,
-            'permissions' => $permissions,
-            'security'    => $this->get('mautic.security'),
+            'route'          => 'hubs_fb_ca_action',
+            'apiData'        => $apiData,
+            'customAudiance' => $customAudiance,
+            'permissions'    => $permissions,
+            'security'       => $this->get('mautic.security'),
         ];
 
         return $this->delegateView(
@@ -167,14 +172,19 @@ class CustomAudienceController extends FormController
         ];
 
         if ($this->request->getMethod() == 'POST') {
-            $apiHelper = $this->get('hubs.fbads.helper');
-            $session   = $apiHelper->getApi()->getSession();
+            $modal          = $this->get('hubs.fbads.model.customaudiance');
+            $customAudience = $modal->getEntity($objectId);
+            $apiHelper      = $this->get('hubs.fbads.helper');
+            $session        = $apiHelper->getApi()->getSession();
             if (!$session->isValidSession()) {
                 return $this->notFound();
             }
-            $audience = new CustomAudience($objectId);
+            $audience = new CustomAudience($customAudience->getCustomAudienceId());
             try {
                 $audience->deleteSelf();
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($customAudience);
+                $em->flush();
             } catch (\Exception $ex) {
                 return $this->renderFacebookAdsException();
             }
