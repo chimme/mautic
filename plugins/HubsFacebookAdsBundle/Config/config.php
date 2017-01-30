@@ -11,7 +11,10 @@ return [
                 'class' => 'MauticPlugin\HubsFacebookAdsBundle\EventListener\MenuSubscriber',
             ],
             'mautic.hubs.lead.subscriber' => [
-                'class' => 'MauticPlugin\HubsFacebookAdsBundle\EventListener\LeadSubscriber',
+                'class'     => 'MauticPlugin\HubsFacebookAdsBundle\EventListener\LeadSubscriber',
+                'arguments' => [
+                    'hubs.fbads.model.customaudiance',
+                ],
             ],
             'mautic.hubs.custom_audiance.subscriber' => [
                 'class'     => 'MauticPlugin\HubsFacebookAdsBundle\EventListener\CustomAudianceSubscriber',

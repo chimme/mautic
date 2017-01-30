@@ -60,4 +60,10 @@ class FacebookApiHelper
             $audience->removeUsers($leadsEmail, CustomAudienceTypes::EMAIL);
         }
     }
+
+    public function deleteCustomAudience($customAudience)
+    {
+        $audience = new CustomAudience($customAudience->getCustomAudienceId());
+        $audience->deleteSelf();
+    }
 }

@@ -16,9 +16,12 @@ use Mautic\CoreBundle\Helper\ProgressBarHelper;
 use Mautic\CoreBundle\Model\FormModel;
 use MauticPlugin\HubsFacebookAdsBundle\Entity\CustomAudience;
 use MauticPlugin\HubsFacebookAdsBundle\Event\CustomAudianceChangeEvent;
+use MauticPlugin\HubsFacebookAdsBundle\Event\CustomAudianceEvent;
 use MauticPlugin\HubsFacebookAdsBundle\Event\CustomAudianceEvents;
 use MauticPlugin\HubsFacebookAdsBundle\Form\AddCustomAudienceType;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 /**
  * Class CustomAudienceModel
@@ -507,5 +510,50 @@ class CustomAudienceModel extends FormModel
         } else {
             sleep($leadSleepTime);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param $action
+     * @param $entity
+     * @param $isNew
+     * @param $event
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+     */
+    protected function dispatchEvent($action, &$entity, $isNew = false, Event $event = null)
+    {
+        if (!$entity instanceof CustomAudience) {
+            throw new MethodNotAllowedHttpException(['CustomAudiance'], 'Entity must be of class CustomAudiance()');
+        }
+
+        switch ($action) {
+            case 'pre_delete':
+                $name = CustomAudianceEvents::CUSTOM_AUDIENCE_PRE_DELETE;
+                break;
+            case 'post_delete':
+                $name = CustomAudianceEvents::CUSTOM_AUDIENCE_POST_DELETE;
+                break;
+            default:
+                return null;
+        }
+
+        if ($this->dispatcher->hasListeners($name)) {
+            if (empty($event)) {
+                $event = new CustomAudianceEvent($entity, $isNew);
+                $event->setEntityManager($this->em);
+            }
+            $this->dispatcher->dispatch($name, $event);
+
+            return $event;
+        } else {
+            return null;
+        }
+    }
+
+    public function updateCustomAudianceToRemove($listId = false, $leadId = false)
+    {
+        return $this->getListLeadCustomAudienceRepository()->updateCustomAudianceToRemove($listId, $leadId);
     }
 }

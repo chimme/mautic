@@ -122,7 +122,6 @@ class CustomAudienceController extends FormController
             }
 
             if ($cancelled || ($valid && ($form->get('buttons')->get('save')->isClicked() || $form->get('buttons')->get('apply')->isClicked()))) {
-                //clear temporary fields
                 return $this->postActionRedirect(
                                 [
                                     'returnUrl'       => $returnUrl,

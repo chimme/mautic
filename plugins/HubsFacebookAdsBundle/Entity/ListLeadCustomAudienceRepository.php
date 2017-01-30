@@ -122,6 +122,7 @@ class ListLeadCustomAudienceRepository extends CommonRepository
         if ($leadId) {
             $q->andWhere('lead_id = '.$leadId);
         }
-        $q->execute();
+
+        return $q->execute();
     }
 }
