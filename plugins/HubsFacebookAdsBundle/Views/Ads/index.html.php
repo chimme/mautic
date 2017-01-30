@@ -108,7 +108,7 @@ $view['slots']->set(
                                     ),
                                 ],
                                 'route'   => 'hubs_fb_ca_action',
-                                'langVar' => 'form',
+                                'langVar' => 'customaudience',
                             ]
                         );
                         ?>

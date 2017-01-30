@@ -542,7 +542,6 @@ class CustomAudienceModel extends FormModel
         if ($this->dispatcher->hasListeners($name)) {
             if (empty($event)) {
                 $event = new CustomAudianceEvent($entity, $isNew);
-                $event->setEntityManager($this->em);
             }
             $this->dispatcher->dispatch($name, $event);
 
