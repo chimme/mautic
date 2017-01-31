@@ -46,7 +46,7 @@ class HubsFacebookAdsBundle extends PluginBundleBase
         }
         $db             = $factory->getDatabase();
         $schemaTool     = new SchemaTool($factory->getEntityManager());
-        $installQueries = $schemaTool->getUpdateSchemaSql($metadata);
+        $installQueries = $schemaTool->getCreateSchemaSql($metadata);
         $db->beginTransaction();
         try {
             foreach ($installQueries as $q) {
