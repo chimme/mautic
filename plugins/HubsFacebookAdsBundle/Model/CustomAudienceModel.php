@@ -26,7 +26,7 @@ class CustomAudienceModel extends FormModel
     protected $coreParametersHelper;
 
     /**
-     * @var CoreParametersHelper
+     * @var customAudienceLists
      */
     protected $customAudienceLists;
 
