@@ -1,23 +1,13 @@
 <?php
 
-/*
- * @copyright   2014 Mautic Contributors. All rights reserved
- * @author      Mautic
- *
- * @link        http://mautic.org
- *
- * @license     GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
- */
-
 namespace MauticPlugin\HubsFacebookAdsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mautic\ApiBundle\Serializer\Driver\ApiMetadataDriver;
 use Mautic\CoreBundle\Doctrine\Mapping\ClassMetadataBuilder;
 use Mautic\CoreBundle\Entity\CommonEntity;
 
 /**
- * Class Lead.
+ * Class CustomAudience.
  */
 class CustomAudience extends CommonEntity
 {
@@ -65,21 +55,6 @@ class CustomAudience extends CommonEntity
     }
 
     /**
-     * @param ApiMetadataDriver $metadata
-     */
-    public static function loadApiMetadata(ApiMetadataDriver $metadata)
-    {
-        $metadata->setGroupPrefix('custom_audience')
-                ->addListProperties(
-                        [
-                            'name',
-                            'custom_audience_id',
-                        ]
-                )
-                ->build();
-    }
-
-    /**
      * @return mixed
      */
     public function getId()
@@ -116,9 +91,9 @@ class CustomAudience extends CommonEntity
     }
 
     /**
-     * @param string $name
+     * @param LeadList $list
      *
-     * @return Name
+     * @return CustomAudience
      */
     public function setList(\Mautic\LeadBundle\Entity\LeadList $list)
     {
@@ -138,7 +113,7 @@ class CustomAudience extends CommonEntity
     /**
      * @param string $customAudienceId
      *
-     * @return Tag
+     * @return CustomAudience
      */
     public function setCustomAudienceId($customAudienceId)
     {
@@ -158,7 +133,7 @@ class CustomAudience extends CommonEntity
     /**
      * @param string $description
      *
-     * @return Tag
+     * @return CustomAudience
      */
     public function setDescription($description)
     {

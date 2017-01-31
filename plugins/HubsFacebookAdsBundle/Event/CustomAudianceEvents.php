@@ -19,14 +19,14 @@ final class CustomAudianceEvents
     const CUSTOM_AUDIENCE_REMOVE = 'hubs.custom_audience_remove';
 
     /**
-     * The hubs.custom_audience_delete event is dispatched right after custom audience deleted.
+     * The hubs.custom_audience.pre_delete event is dispatched right before custom audience deleted.
      *
      * @var string
      */
     const CUSTOM_AUDIENCE_PRE_DELETE = 'hubs.custom_audience.pre_delete';
 
     /**
-     * The hubs.custom_audience_delete event is dispatched right after custom audience deleted.
+     * The hubs.custom_audience.post_delete event is dispatched right after custom audience deleted.
      *
      * @var string
      */

@@ -37,8 +37,7 @@ class LeadSubscriber extends CommonSubscriber
         }
         $listId = (is_object($list)) ? $list->getId() : $list;
         $leadId = (is_object($lead)) ? $lead->getId() : $lead;
-//        $this->em->getRepository('HubsFacebookAdsBundle:ListLeadCustomAudience')
-        $this->customAudienceModel > updateCustomAudianceToRemove($listId, $leadId);
+        $this->customAudienceModel->updateCustomAudianceToRemove($listId, $leadId);
 
         return;
     }
@@ -46,7 +45,7 @@ class LeadSubscriber extends CommonSubscriber
     public function onLeadDelete(LeadEvent $event)
     {
         $lead = $event->getLead();
-        $this->customAudienceModel > updateCustomAudianceToRemove(false, $lead->deletedId);
+        $this->customAudienceModel->updateCustomAudianceToRemove(false, $lead->deletedId);
 
         return;
     }

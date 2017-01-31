@@ -21,7 +21,7 @@ class CustomAudianceEvent extends Event
     }
 
     /**
-     * @return LeadList|List
+     * @return CustomAudience
      */
     public function getCustomAudience()
     {

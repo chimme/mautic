@@ -1,21 +1,12 @@
 <?php
 
-/*
- * @copyright   2014 Mautic Contributors. All rights reserved
- * @author      Mautic
- *
- * @link        http://mautic.org
- *
- * @license     GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
- */
-
 namespace MauticPlugin\HubsFacebookAdsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Mautic\CoreBundle\Doctrine\Mapping\ClassMetadataBuilder;
 
 /**
- * Class ListLead.
+ * Class ListLeadCustomAudience.
  */
 class ListLeadCustomAudience
 {
@@ -30,7 +21,7 @@ class ListLeadCustomAudience
     private $lead;
 
     /**
-     * @var Lead
+     * @var CustomAudience
      */
     private $customAudience;
 
@@ -119,7 +110,7 @@ class ListLeadCustomAudience
     }
 
     /**
-     * @param LeadList $leadList
+     * @param Lead $lead
      */
     public function setLead($lead)
     {
