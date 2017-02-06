@@ -6,6 +6,7 @@ use Mautic\CoreBundle\Factory\MauticFactory;
 use Mautic\LeadBundle\Entity\LeadField;
 use Mautic\PluginBundle\Bundle\PluginBundleBase;
 use Mautic\PluginBundle\Entity\Plugin;
+use MauticPlugin\HubsSlugGeneratorBundle\Helper\SlugGeneratorHelper;
 
 class HubsSlugGeneratorBundle extends PluginBundleBase
 {
@@ -19,7 +20,7 @@ class HubsSlugGeneratorBundle extends PluginBundleBase
      */
     public static function onPluginInstall(Plugin $plugin, MauticFactory $factory, $metadata = null, $installedSchema = null)
     {
-        $label = $factory->getParameter('slug_field_label');
+        $label = (!$factory->getParameter('slug_field_label')) ? SlugGeneratorHelper::DEFAULT_SLUG_NAME : $factory->getParameter('slug_field_label');
         $model = $factory->getModel('lead.field');
         $field = new LeadField();
         $field->setIsPubliclyUpdatable(true);

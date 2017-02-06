@@ -8,17 +8,21 @@ class SlugGeneratorHelper
 {
     protected $em;
     protected $slugField;
+    const DEFAULT_SLUG_NAME = 'slug';
 
     public function __construct(EntityManager $em, $slugField = false)
     {
-        $this->em = $em;
-
+        $this->em        = $em;
         $this->slugField = $slugField;
     }
 
     public function getSlugFieldName()
     {
-        return $this->slugField;
+        if ($this->slugField) {
+            return $this->slugField;
+        }
+
+        return self::DEFAULT_SLUG_NAME;
     }
 
     public function clean($string)
@@ -54,7 +58,7 @@ class SlugGeneratorHelper
     {
         $repo  = $this->em->getRepository('MauticLeadBundle:Lead');
         $table = $this->em->getClassMetadata($repo->getClassName())->getTableName();
-        $col   = 'l.'.$this->slugField;
+        $col   = 'l.'.$this->getSlugFieldName();
         $conn  = $this->em->getConnection();
         $q     = $conn->createQueryBuilder()
             ->select("COUNT($col) as cnt")
