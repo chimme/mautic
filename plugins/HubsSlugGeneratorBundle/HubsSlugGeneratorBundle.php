@@ -29,7 +29,8 @@ class HubsSlugGeneratorBundle extends PluginBundleBase
         $field->setIsPublished(true);
         $field->setGroup('core');
         $field->setAlias($label);
-        $field->setLabel($label);
+        $field->setLabel(ucfirst($label));
+        $field->setOrder(42);
         $model->saveEntity($field);
         parent::onPluginInstall($plugin, $factory, $metadata, $installedSchema);
     }
