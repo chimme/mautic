@@ -33,7 +33,7 @@ return [
             'hubs.helper.slug.generator' => [
                 'class'     => 'MauticPlugin\HubsSlugGeneratorBundle\Helper\SlugGeneratorHelper',
                 'arguments' => [
-                    'doctrine.orm.default_entity_manager', '%mautic.slug_field_label%',
+                    'doctrine.orm.default_entity_manager', 'mautic.helper.integration',
                 ],
             ],
         ],

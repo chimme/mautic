@@ -8,9 +8,11 @@ use Symfony\Component\Form\FormBuilder;
 
 class SlugGeneratorIntegration extends AbstractIntegration
 {
+    const PLUGIN_NAME = 'SlugGenerator';
+
     public function getName()
     {
-        return 'SlugGenerator';
+        return self::PLUGIN_NAME;
     }
 
     /**
@@ -30,13 +32,16 @@ class SlugGeneratorIntegration extends AbstractIntegration
      */
     public function appendToForm(&$builder, $data, $formArea)
     {
-        $builder->add(
-                'slugfield',
-                'leadfields_choices',
-                [
-                    'label' => 'mautic.plugin.leadfield',
-                    'data'  => (isset($data['slugfield'])) ? $data['slugfield'] : false,
-                ]
+        if ($formArea === 'keys') {
+            $builder->add(
+                    'slugfield', 'leadfields_choices', [
+                'label'       => 'hubs.plugin.sluggenerator.leadfield',
+                'data'        => (isset($data['slugfield'])) ? $data['slugfield'] : false,
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\NotBlank(),
+                ],
+                    ]
             );
+        }
     }
 }

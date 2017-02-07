@@ -3,27 +3,42 @@
 namespace MauticPlugin\HubsSlugGeneratorBundle\Helper;
 
 use Doctrine\ORM\EntityManager;
+use Mautic\PluginBundle\Helper\IntegrationHelper;
+use MauticPlugin\HubsSlugGeneratorBundle\Integration\SlugGeneratorIntegration;
 
 class SlugGeneratorHelper
 {
     protected $em;
-    protected $slugField;
+    protected $slugField = false;
+    protected $integrationHelper;
     protected $contacts     = [];
     const DEFAULT_SLUG_NAME = 'slug';
 
-    public function __construct(EntityManager $em, $slugField = false)
+    public function __construct(EntityManager $em, IntegrationHelper $integrationHelper)
     {
-        $this->em        = $em;
-        $this->slugField = $slugField;
+        $this->em                = $em;
+        $this->integrationHelper = $integrationHelper;
+        $this->setSlugFieldName();
+    }
+
+    public function getPluginIntegrationObject()
+    {
+        return $this->integrationHelper->getIntegrationObject(SlugGeneratorIntegration::PLUGIN_NAME);
+    }
+
+    public function setSlugFieldName()
+    {
+        $integrationObj = $this->getPluginIntegrationObject();
+        if (!$integrationObj) {
+            return false;
+        }
+        $fields          = $integrationObj->getKeys();
+        $this->slugField = $fields['slugfield'];
     }
 
     public function getSlugFieldName()
     {
-        if ($this->slugField) {
-            return $this->slugField;
-        }
-
-        return self::DEFAULT_SLUG_NAME;
+        return $this->slugField;
     }
 
     public function clean($string)
@@ -94,6 +109,9 @@ class SlugGeneratorHelper
 
     public function generateAllContactSlugs()
     {
+        if (!$this->slugField) {
+            return;
+        }
         $this->contacts = $this->getAllContacts();
         $slugsGenerated = [];
         foreach ($this->contacts as $key => $contact) {

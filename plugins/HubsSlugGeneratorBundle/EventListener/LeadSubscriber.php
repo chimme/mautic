@@ -28,6 +28,9 @@ class LeadSubscriber extends CommonSubscriber
         $lead         = $event->getLead();
         $customFields = $lead->getFields('core');
         $label        = $this->helper->getSlugFieldName();
+        if (!$label) {
+            return;
+        }
         if (!isset($customFields[$label])) {
             return;
         }
