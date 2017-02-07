@@ -38,6 +38,7 @@ class MenuSubscriber extends CommonSubscriber
                             'route' => 'hubs_fb_ca_index',
                         ],
                     ],
+                    'iconClass' => 'fa-facebook-official',
                 ],
             ],
         ];
