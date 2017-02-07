@@ -2,6 +2,7 @@
 
 namespace MauticPlugin\HubsSlugGeneratorBundle\Helper;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManager;
 use Mautic\PluginBundle\Helper\IntegrationHelper;
 use MauticPlugin\HubsSlugGeneratorBundle\Integration\SlugGeneratorIntegration;
@@ -11,6 +12,7 @@ class SlugGeneratorHelper
     protected $em;
     protected $slugField = false;
     protected $integrationHelper;
+    protected $slugifyHelper;
     protected $contacts     = [];
     const DEFAULT_SLUG_NAME = 'slug';
 
@@ -19,6 +21,7 @@ class SlugGeneratorHelper
         $this->em                = $em;
         $this->integrationHelper = $integrationHelper;
         $this->setSlugFieldName();
+        $this->slugifyHelper = new Slugify();
     }
 
     public function getPluginIntegrationObject()
@@ -46,15 +49,9 @@ class SlugGeneratorHelper
         return $this->slugField;
     }
 
-    public function clean($string)
+    public function clean($firstname, $lastname)
     {
-        // Replaces all spaces with hyphens.
-        $string = str_replace(' ', '-', $string);
-        // Removes special chars.
-        $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
-
-        // Replaces multiple hyphens with single one.
-        return preg_replace('/-+/', '-', $string);
+        return $this->slugifyHelper->slugify($firstname.' '.$lastname);
     }
 
     public function getSlugText($firstName, $lastName)
@@ -62,7 +59,7 @@ class SlugGeneratorHelper
         if (!$firstName || !$lastName) {
             return false;
         }
-        $strToProcess = $string = $this->clean($firstName.'-'.$lastName);
+        $strToProcess = $string = $this->clean($firstName, $lastName);
         $noToAdd      = '';
         while (1) {
             if (false == $count = $this->isContactSlugExists($strToProcess)) {
@@ -121,7 +118,7 @@ class SlugGeneratorHelper
         $slugsGenerated = [];
         foreach ($this->contacts as $key => $contact) {
             $cnt          = 0;
-            $strToProcess = $string = $this->clean($contact['firstname'].'-'.$contact['lastname']);
+            $strToProcess = $string = $this->clean($contact['firstname'], $contact['lastname']);
             while (isset($slugsGenerated[$strToProcess])) {
                 $strToProcess = $string.(++$cnt);
             }
