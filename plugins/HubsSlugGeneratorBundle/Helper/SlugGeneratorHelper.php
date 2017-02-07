@@ -28,6 +28,11 @@ class SlugGeneratorHelper
 
     public function setSlugFieldName()
     {
+        $plugin = $this->em->getRepository('MauticPluginBundle:Integration')
+                 ->findBy(['name' => SlugGeneratorIntegration::PLUGIN_NAME, 'isPublished' => true]);
+        if (!$plugin) {
+            return false;
+        }
         $integrationObj = $this->getPluginIntegrationObject();
         if (!$integrationObj) {
             return false;
