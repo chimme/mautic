@@ -67,7 +67,7 @@ class StageApiController extends CommonApiController
             return $this->accessDenied();
         }
 
-        $leadModel->addToStages($contact, $stage);
+        $leadModel->addToStages($contact, $stage)->saveEntity($contact);
 
         return $this->handleView($this->view(['success' => 1], Codes::HTTP_OK));
     }
@@ -103,7 +103,7 @@ class StageApiController extends CommonApiController
             return $this->accessDenied();
         }
 
-        $leadModel->removeFromStages($contact, $stage);
+        $leadModel->removeFromStages($contact, $stage)->saveEntity($contact);
 
         return $this->handleView($this->view(['success' => 1], Codes::HTTP_OK));
     }
