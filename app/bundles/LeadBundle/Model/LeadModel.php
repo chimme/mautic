@@ -1071,6 +1071,9 @@ class LeadModel extends FormModel
             $leadId = (is_array($lead) && isset($lead['id'])) ? $lead['id'] : $lead;
             $lead   = $this->em->getReference('MauticLeadBundle:Lead', $leadId);
         }
+        if ($lead->getStage() && ($lead->getStage()->getId() == $stage->getId())) {
+            return $this;
+        }
         $lead->setStage($stage);
         $lead->stageChangeLogEntry(
             $stage,
