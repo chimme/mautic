@@ -51,7 +51,7 @@ class AppKernel extends Kernel
      *
      * @const string
      */
-    const EXTRA_VERSION = '-patched';
+    const EXTRA_VERSION = '-p2';
 
     /**
      * @var array
