@@ -498,7 +498,11 @@ class EmailController extends FormController
         }
 
         //create the form
-        $form = $model->createForm($entity, $this->get('form.factory'), $action, ['update_select' => $updateSelect]);
+        $form     = $model->createForm($entity, $this->get('form.factory'), $action, ['update_select' => $updateSelect]);
+        $beeToken = false;
+        if ($this->has('mautic.helper.bee.auth.helper')) {
+            $beeToken = $this->get('mautic.helper.bee.auth.helper')->getToken();
+        }
 
         ///Check for a submitted form and process it
         if ($method == 'POST') {
@@ -595,6 +599,7 @@ class EmailController extends FormController
                     'themes'        => $this->factory->getInstalledThemes('email', true),
                     'builderAssets' => trim(preg_replace('/\s+/', ' ', $this->getAssetsForBuilder())), // strip new lines
                     'sectionForm'   => $sectionForm->createView(),
+                    'beeToken'      => $beeToken,
                 ],
                 'contentTemplate' => 'MauticEmailBundle:Email:form.html.php',
                 'passthroughVars' => [
@@ -686,6 +691,11 @@ class EmailController extends FormController
         }
 
         $form = $model->createForm($entity, $this->get('form.factory'), $action, ['update_select' => $updateSelect]);
+
+        $beeToken = false;
+        if ($this->has('mautic.helper.bee.auth.helper')) {
+            $beeToken = $this->get('mautic.helper.bee.auth.helper')->getToken();
+        }
 
         ///Check for a submitted form and process it
         if (!$ignorePost && $method == 'POST') {
@@ -802,6 +812,7 @@ class EmailController extends FormController
                     'attachmentSize'     => $attachmentSize,
                     'builderAssets'      => trim(preg_replace('/\s+/', ' ', $this->getAssetsForBuilder())), // strip new lines
                     'sectionForm'        => $sectionForm->createView(),
+                    'beeToken'           => $beeToken,
                 ],
                 'contentTemplate' => 'MauticEmailBundle:Email:form.html.php',
                 'passthroughVars' => [

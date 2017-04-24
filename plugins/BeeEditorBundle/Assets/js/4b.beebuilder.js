@@ -3,7 +3,7 @@
  *
  * @param formName
  */
-Mautic.launchBuilder = function (formName, actionName) {
+Mautic.launchBeeBuilder = function (formName, actionName) {
     Mautic.codeMode = mQuery('.builder').hasClass('code-mode');
     Mautic.showChangeThemeWarning = true;
 
@@ -84,48 +84,6 @@ Mautic.launchBuilder = function (formName, actionName) {
     });
 };
 
-var beeConfig = {  
-      uid: 'test1-clientside',
-      container: 'bee-plugin-container',
-      autosave: 15, 
-      language: 'en-US',
-//      specialLinks: specialLinks,
-//      mergeTags: mergeTags,
-//      mergeContents: mergeContents,
-      onSave: function(jsonFile, htmlFile) { 
-        save('newsletter.html', htmlFile);
-      },
-      onSaveAsTemplate: function(jsonFile) { // + thumbnail? 
-        save('newsletter-template.json', jsonFile);
-      },
-      onAutoSave: function(jsonFile) { // + thumbnail? 
-        console.log(new Date().toISOString() + ' autosaving...');
-        window.localStorage.setItem('newsletter.autosave', jsonFile);
-      },
-      onSend: function(htmlFile) {
-        //write your send test function here
-      },
-      onError: function(errorMessage) { 
-        console.log('onError ', errorMessage);
-      }
-    };
-
-    var bee = null;
-
-Mautic.launchBeeBuilder = function (token) {
-    BeePlugin.create(token, beeConfig, function(beePluginInstance) {
-          console.log(token);
-          bee = beePluginInstance;
-          request(
-            'GET', 
-            'https://rsrc.getbee.io/api/templates/m-bee',
-            null,
-            null,
-            function(template) {
-              bee.start(template);
-            });
-        });
-}
 /**
  * Frmats code style in the CodeMirror editor
  */
