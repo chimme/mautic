@@ -42,15 +42,11 @@ class ConfigSubscriber extends CommonSubscriber
      */
     public function onConfigSave(ConfigEvent $event)
     {
-        /** @var array $values */
-        $values = $event->getConfig();
-
-        // Manipulate the values
-        if (!empty($values['social_config']['twitter_handle_field'])) {
-            $values['social_config']['twitter_handle_field'] = htmlspecialchars($values['social_config']['twitter_handle_field']);
-        }
-
-        // Set updated values
-        $event->setConfig($values);
+        $event->unsetIfEmpty(
+            [
+                'bee_client_id',
+                'bee_client_secret',
+            ]
+        );
     }
 }
