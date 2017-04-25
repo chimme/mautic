@@ -441,6 +441,7 @@ class EmailType extends AbstractType
 
         $builder->add('sessionId', 'hidden');
         $builder->add('emailType', 'hidden');
+        $builder->add('description', 'hidden');
 
         $customButtons = [
             [

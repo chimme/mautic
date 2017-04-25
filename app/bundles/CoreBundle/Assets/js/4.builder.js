@@ -84,37 +84,74 @@ Mautic.launchBuilder = function (formName, actionName) {
     });
 };
 
-var beeConfig = {  
-      uid: 'test1-clientside',
-      container: 'bee-plugin-container',
-      autosave: 15, 
-      language: 'en-US',
-//      specialLinks: specialLinks,
-//      mergeTags: mergeTags,
-//      mergeContents: mergeContents,
-      onSave: function(jsonFile, htmlFile) { 
-        save('newsletter.html', htmlFile);
-      },
-      onSaveAsTemplate: function(jsonFile) { // + thumbnail? 
+var mergeTags = [];
+
+var beeConfig = {
+    uid: 'test1-clientside',
+    container: 'bee-plugin-container',
+    autosave: 15,
+    language: 'en-US',
+    //specialLinks: specialLinks,
+    mergeTags: [],
+    //mergeContents: mergeContents,
+    onSave: function (jsonFile, htmlFile) {
+        mQuery('#emailform_description').val(jsonFile);
+        mQuery('.builder-html').val(htmlFile);
+        mQuery('#bee-plugin-container').hide();
+        mQuery('#emailform_buttons_beebuilder_toolbar').children().removeClass('fa-spin fa-spinner')
+    },
+    onSaveAsTemplate: function (jsonFile) { // + thumbnail? 
         save('newsletter-template.json', jsonFile);
-      },
-      onAutoSave: function(jsonFile) { // + thumbnail? 
+    },
+    onAutoSave: function (jsonFile) { // + thumbnail? 
         console.log(new Date().toISOString() + ' autosaving...');
         window.localStorage.setItem('newsletter.autosave', jsonFile);
-      },
-      onSend: function(htmlFile) {
+    },
+    onSend: function (htmlFile) {
         //write your send test function here
-      },
-      onError: function(errorMessage) { 
+    },
+    onError: function (errorMessage) {
         console.log('onError ', errorMessage);
-      }
-    };
-
-    var bee = null;
+    }
+};
+    Mautic.getTokens('email:getBuilderTokens', function(tokens) {
+        mQuery.each(tokens, function(i, j){
+            beeConfig.mergeTags.push({'name' : j, 'value' : i})
+        });
+    });
+var bee = null;
 
 Mautic.launchBeeBuilder = function (token) {
+    mQuery('#emailform_template').val('mautic_code_mode');
+    var request = function(method, url, data, type, callback) {
+      var req = new XMLHttpRequest();
+      console.log(type);
+      req.onreadystatechange = function() {
+        if (req.readyState === 4 && req.status === 200) {
+          var response = JSON.parse(req.responseText);
+          callback(response);
+        }
+      };
+
+      req.open(method, url, true);
+      if (data && type) {
+        if(type === 'multipart/form-data') {
+          var formData = new FormData();
+          for (var key in data) {
+            formData.append(key, data[key]);
+          }
+          data = formData;          
+        }
+        else {
+          req.setRequestHeader('Content-type', type);
+        }
+      }
+
+      req.send(data);
+    };
+    var templatejson = mQuery('#bee-plugin-container').data('template');
+    mQuery('#bee-plugin-container').show();
     BeePlugin.create(token, beeConfig, function(beePluginInstance) {
-          console.log(token);
           bee = beePluginInstance;
           request(
             'GET', 
@@ -122,7 +159,11 @@ Mautic.launchBeeBuilder = function (token) {
             null,
             null,
             function(template) {
-              bee.start(template);
+                if(templatejson == ''){
+                    bee.start(template);
+                } else {
+                    bee.start(templatejson);
+                }
             });
         });
 }

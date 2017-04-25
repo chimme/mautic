@@ -47,10 +47,11 @@ $templates = [
 
 $attr = $form->vars['attr'];
 
-$isCodeMode = ($email->getTemplate() === 'mautic_code_mode');
+$isCodeMode  = ($email->getTemplate() === 'mautic_code_mode');
+$description = ($email->getDescription()) ? $email->getDescription() : '';
 
 ?>
-<script src="https://app-rsrc.getbee.io/plugin/BeePlugin.js"></script>
+
 
 <?php echo $view['form']->start($form, ['attr' => $attr]); ?>
 <div class="box-layout">
@@ -240,17 +241,15 @@ $isCodeMode = ($email->getTemplate() === 'mautic_code_mode');
         </select>
     <?php endforeach; ?>
 </div>
-<div id="bee-plugin-container"></div>
-<style>
-    #bee-plugin-container {
-        position: absolute;
-        top:5px;
-        bottom:30px;
-        left:5px;
-        right:5px;
-      }
-</style>
-<?php echo $view->render('MauticCoreBundle:Helper:builder.html.php', [
+
+    <?php
+    if (isset($beeToken)) {
+        echo $view->render('BeeEditorBundle:Helper:beebuilder.html.php', [
+            'description' => $description,
+        ]);
+    }
+
+    echo $view->render('MauticCoreBundle:Helper:builder.html.php', [
     'type'          => 'email',
     'isCodeMode'    => $isCodeMode,
     'sectionForm'   => $sectionForm,
@@ -282,3 +281,5 @@ if (!$isExisting || empty($type) || !empty($forceTypeSelection)):
             'typeTwoOnClick'     => "Mautic.selectEmailType('list');",
         ]);
 endif;
+
+?>
