@@ -498,11 +498,7 @@ class EmailController extends FormController
         }
 
         //create the form
-        $form     = $model->createForm($entity, $this->get('form.factory'), $action, ['update_select' => $updateSelect]);
-        $beeToken = false;
-        if ($this->has('mautic.helper.bee.auth.helper')) {
-            $beeToken = $this->get('mautic.helper.bee.auth.helper')->getToken();
-        }
+        $form = $model->createForm($entity, $this->get('form.factory'), $action, ['update_select' => $updateSelect]);
 
         ///Check for a submitted form and process it
         if ($method == 'POST') {
@@ -587,6 +583,10 @@ class EmailController extends FormController
 
         $slotTypes   = $model->getBuilderComponents($entity, 'slotTypes');
         $sectionForm = $this->get('form.factory')->create('builder_section');
+        $beeToken    = false;
+        if ($this->has('mautic.helper.bee.auth.helper')) {
+            $beeToken = $this->get('mautic.helper.bee.auth.helper')->getToken();
+        }
 
         return $this->delegateView(
             [
@@ -692,11 +692,6 @@ class EmailController extends FormController
 
         $form = $model->createForm($entity, $this->get('form.factory'), $action, ['update_select' => $updateSelect]);
 
-        $beeToken = false;
-        if ($this->has('mautic.helper.bee.auth.helper')) {
-            $beeToken = $this->get('mautic.helper.bee.auth.helper')->getToken();
-        }
-
         ///Check for a submitted form and process it
         if (!$ignorePost && $method == 'POST') {
             $valid = false;
@@ -798,6 +793,11 @@ class EmailController extends FormController
 
         $slotTypes   = $model->getBuilderComponents($entity, 'slotTypes');
         $sectionForm = $this->get('form.factory')->create('builder_section');
+
+        $beeToken = false;
+        if ($this->has('mautic.helper.bee.auth.helper')) {
+            $beeToken = $this->get('mautic.helper.bee.auth.helper')->getToken();
+        }
 
         return $this->delegateView(
             [

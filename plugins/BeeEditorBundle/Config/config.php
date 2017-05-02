@@ -23,6 +23,14 @@ return [
             ],
         ],
     ],
+    'routes' => [
+        'main' => [
+            'hubs_bee_generate_token' => [
+                'path'       => '/generatebeetoken',
+                'controller' => 'BeeEditorBundle:Index:generate',
+            ],
+        ],
+    ],
     'parameters' => [
         'bee_client_id' => null,
     'bee_client_secret' => null,

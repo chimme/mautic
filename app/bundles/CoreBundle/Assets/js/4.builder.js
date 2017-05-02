@@ -89,7 +89,7 @@ var mergeTags = [];
 var beeConfig = {
     uid: 'test1-clientside',
     container: 'bee-plugin-container',
-    autosave: 15,
+    autosave: false,
     language: 'en-US',
     //specialLinks: specialLinks,
     mergeTags: [],
@@ -112,7 +112,8 @@ var beeConfig = {
     },
     onError: function (errorMessage) {
         console.log('onError ', errorMessage);
-    }
+    },
+    tokenData: {}
 };
     Mautic.getTokens('email:getBuilderTokens', function(tokens) {
         mQuery.each(tokens, function(i, j){
@@ -122,50 +123,81 @@ var beeConfig = {
 var bee = null;
 
 Mautic.launchBeeBuilder = function (token) {
+    if(mQuery.isEmptyObject(beeConfig.tokenData)){
+        beeConfig.tokenData = token;
+    }
+    
     mQuery('#emailform_template').val('mautic_code_mode');
     var request = function(method, url, data, type, callback) {
-      var req = new XMLHttpRequest();
-      console.log(type);
-      req.onreadystatechange = function() {
-        if (req.readyState === 4 && req.status === 200) {
-          var response = JSON.parse(req.responseText);
-          callback(response);
-        }
-      };
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function() {
+            if (req.readyState === 4 && req.status === 200) {
+                var response = JSON.parse(req.responseText);
+                callback(response);
+            }
+        };
 
-      req.open(method, url, true);
-      if (data && type) {
-        if(type === 'multipart/form-data') {
-          var formData = new FormData();
-          for (var key in data) {
-            formData.append(key, data[key]);
-          }
-          data = formData;          
-        }
-        else {
-          req.setRequestHeader('Content-type', type);
-        }
-      }
-
-      req.send(data);
-    };
-    var templatejson = mQuery('#bee-plugin-container').data('template');
-    mQuery('#bee-plugin-container').show();
-    BeePlugin.create(token, beeConfig, function(beePluginInstance) {
-          bee = beePluginInstance;
-          request(
-            'GET', 
-            'https://rsrc.getbee.io/api/templates/m-bee',
-            null,
-            null,
-            function(template) {
-                if(templatejson == ''){
-                    bee.start(template);
-                } else {
-                    bee.start(templatejson);
+        req.open(method, url, true);
+        if (data && type) {
+            if(type === 'multipart/form-data') {
+                var formData = new FormData();
+                for (var key in data) {
+                  formData.append(key, data[key]);
                 }
-            });
+                data = formData;          
+            }
+            else {
+              req.setRequestHeader('Content-type', type);
+            }
+        }
+
+        req.send(data);
+    };
+    
+    var initBeeeditor = function(token){
+        var templatejson = mQuery('#bee-plugin-container').data('template');
+        mQuery('#bee-plugin-container').show();
+        BeePlugin.create(token, beeConfig, function(beePluginInstance) {
+            bee = beePluginInstance;
+            if(templatejson){
+                bee.start(templatejson);
+            }else{
+              request(
+                'GET', 
+                'https://rsrc.getbee.io/api/templates/m-bee',
+                null,
+                null,
+                function(template) {
+                      bee.start(template);
+                });
+            }
         });
+    };
+    
+    var generateToken = function(){
+        mQuery.ajax({
+            url: mauticBaseUrl+'s/generatebeetoken',
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (typeof response.tokens !== 'undefined') {
+                    // store the tokens to the session storage
+                    beeConfig.tokenData = response.tokens;
+                    initBeeeditor(beeConfig.tokenData);
+                }
+            },
+            error: function (request, textStatus, errorThrown) {
+                
+            }
+        });
+    };
+    
+    if((new Date(beeConfig.tokenData[".expires"]).getTime()/1000) - Math.floor(Date.now() / 1000) <= 0){
+        generateToken();
+    }else{
+        initBeeeditor(beeConfig.tokenData);
+    }
+    
 }
 /**
  * Frmats code style in the CodeMirror editor

@@ -18,8 +18,8 @@ class BeeAuthHelper
     /**
      * The constructor.
      *
-     * @param string $key    : The key provided by the api
-     * @param string $secret : The secret provided by the api
+     * @param string $client_id     : The key provided by the api
+     * @param string $client_secret : The secret provided by the api
      */
     public function __construct($client_id = null, $client_secret = null)
     {
@@ -30,7 +30,7 @@ class BeeAuthHelper
     /**
      * Sets the client id that is provided by the API.
      *
-     * @param string $key
+     * @param string $client_id
      */
     public function setClientID($client_id)
     {
@@ -40,7 +40,7 @@ class BeeAuthHelper
     /**
      * Set the client secret provided by the API.
      *
-     * @param string string $secret
+     * @param string string $client_secret
      */
     public function setClientSecret($client_secret)
     {
@@ -51,8 +51,8 @@ class BeeAuthHelper
      * Call the API and get the access token, user and other information  required
      * to access the api.
      *
-     * @param string $grant_type   : The grant type used to authenticate the API
-     * @param string $json_decode: Return the result as an object or array. Default is object, to return set type to 'array'
+     * @param string $grant_type  : The grant type used to authenticate the API
+     * @param string $json_decode : Return the result as an object or array. Default is object, to return set type to 'array'
      *
      * @return $mixed credentials
      */
