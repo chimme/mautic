@@ -243,7 +243,7 @@ $description = ($email->getDescription()) ? $email->getDescription() : '';
 </div>
 
     <?php
-    if (isset($beeToken)) {
+    if ($view->exists('BeeEditorBundle:Helper:beebuilder.html.php')) {
         echo $view->render('BeeEditorBundle:Helper:beebuilder.html.php', [
             'description' => $description,
         ]);

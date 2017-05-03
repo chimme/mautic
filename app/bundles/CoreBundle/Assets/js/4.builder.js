@@ -123,6 +123,8 @@ var beeConfig = {
 var bee = null;
 
 Mautic.launchBeeBuilder = function (token) {
+    beeConfig.uid = BEE_UID;
+    beeConfig.language = BEE_LOCALE;
     if(mQuery.isEmptyObject(beeConfig.tokenData)){
         beeConfig.tokenData = token;
     }

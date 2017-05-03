@@ -583,10 +583,6 @@ class EmailController extends FormController
 
         $slotTypes   = $model->getBuilderComponents($entity, 'slotTypes');
         $sectionForm = $this->get('form.factory')->create('builder_section');
-        $beeToken    = false;
-        if ($this->has('mautic.helper.bee.auth.helper')) {
-            $beeToken = $this->get('mautic.helper.bee.auth.helper')->getToken();
-        }
 
         return $this->delegateView(
             [
@@ -599,7 +595,6 @@ class EmailController extends FormController
                     'themes'        => $this->factory->getInstalledThemes('email', true),
                     'builderAssets' => trim(preg_replace('/\s+/', ' ', $this->getAssetsForBuilder())), // strip new lines
                     'sectionForm'   => $sectionForm->createView(),
-                    'beeToken'      => $beeToken,
                 ],
                 'contentTemplate' => 'MauticEmailBundle:Email:form.html.php',
                 'passthroughVars' => [
@@ -794,11 +789,6 @@ class EmailController extends FormController
         $slotTypes   = $model->getBuilderComponents($entity, 'slotTypes');
         $sectionForm = $this->get('form.factory')->create('builder_section');
 
-        $beeToken = false;
-        if ($this->has('mautic.helper.bee.auth.helper')) {
-            $beeToken = $this->get('mautic.helper.bee.auth.helper')->getToken();
-        }
-
         return $this->delegateView(
             [
                 'viewParameters' => [
@@ -812,7 +802,6 @@ class EmailController extends FormController
                     'attachmentSize'     => $attachmentSize,
                     'builderAssets'      => trim(preg_replace('/\s+/', ' ', $this->getAssetsForBuilder())), // strip new lines
                     'sectionForm'        => $sectionForm->createView(),
-                    'beeToken'           => $beeToken,
                 ],
                 'contentTemplate' => 'MauticEmailBundle:Email:form.html.php',
                 'passthroughVars' => [

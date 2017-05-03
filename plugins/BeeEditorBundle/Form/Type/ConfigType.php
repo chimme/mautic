@@ -17,7 +17,6 @@ class ConfigType extends AbstractType
                     'class'        => 'form-control',
                     'placeholder'  => 'mautic.user.user.form.passwordplaceholder',
                     'preaddon'     => 'fa fa-lock',
-                    'tooltip'      => 'mautic.email.config.mailer.password.tooltip',
                     'autocomplete' => 'off',
                 ],
         ]);
@@ -29,9 +28,19 @@ class ConfigType extends AbstractType
                     'class'        => 'form-control',
                     'placeholder'  => 'mautic.user.user.form.passwordplaceholder',
                     'preaddon'     => 'fa fa-lock',
-                    'tooltip'      => 'mautic.email.config.mailer.password.tooltip',
                     'autocomplete' => 'off',
                 ],
+        ]);
+        $builder->add('bee_uid', 'text', [
+            'label'      => '55hubs.bee.uid',
+            'required'   => false,
+            'label_attr' => ['class' => 'control-label'],
+            'attr'       => [
+                    'class' => 'form-control',
+                ],
+            'constraints' => [
+                new \Symfony\Component\Validator\Constraints\Regex(['pattern' => '/^[a-zA-Z_-]+$/i']),
+            ],
         ]);
     }
 

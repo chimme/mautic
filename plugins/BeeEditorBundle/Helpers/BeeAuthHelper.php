@@ -15,6 +15,26 @@ class BeeAuthHelper
     //Url to call when authenicating
     private $_auth_url = 'https://auth.getbee.io/apiauth';
 
+    private $availableLocales = [
+        'en_US' => 'en-US',
+        'es'    => 'es-ES',
+        'fr'    => 'fr-FR',
+        'it_IT' => 'it-IT',
+        'pt_BR' => 'pt-BR',
+        'id_ID' => 'id-ID',
+        'ja'    => 'ja-JP',
+        'zh_CN' => 'zh-CN',
+        'de'    => 'de-DE',
+        'da'    => 'da-DK',
+        'sv'    => 'sv-SE',
+        'pl_PL' => 'pl-PL',
+        'ru'    => 'ru-RU',
+        'ko_KR' => 'ko-KR',
+        'nl'    => 'nl-NL',
+    ];
+
+    private $fallBackLocale = 'en-US';
+
     /**
      * The constructor.
      *
@@ -109,5 +129,10 @@ class BeeAuthHelper
     public function hasValidToken()
     {
         return ($this->getToken()) ? true : false;
+    }
+
+    public function getBeeLocale($locale)
+    {
+        return (isset($this->availableLocales[$locale])) ? $this->availableLocales[$locale] : $this->fallBackLocale;
     }
 }

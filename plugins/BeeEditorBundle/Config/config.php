@@ -22,6 +22,13 @@ return [
                 'arguments' => ['%mautic.bee_client_id%', '%mautic.bee_client_secret%'],
             ],
         ],
+        'helpers' => [
+            '55hubs.helper.template.beeeditor' => [
+                'class'     => 'MauticPlugin\BeeEditorBundle\Templating\Helper\BeeTemplateHelper',
+                'arguments' => 'mautic.factory',
+                'alias'     => 'bee_template',
+            ],
+        ],
     ],
     'routes' => [
         'main' => [
@@ -34,5 +41,6 @@ return [
     'parameters' => [
         'bee_client_id' => null,
     'bee_client_secret' => null,
+    'bee_uid'           => null,
     ],
 ];
