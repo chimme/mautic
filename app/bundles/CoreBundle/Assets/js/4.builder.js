@@ -126,7 +126,13 @@ Mautic.launchBeeBuilder = function (token) {
     if(mQuery.isEmptyObject(beeConfig.tokenData)){
         beeConfig.tokenData = token;
     }
-    
+    var panelHeight = (mQuery('.builder-content').css('right') == '0px') ? mQuery('.builder-panel').height() : 0,
+        panelWidth = (mQuery('.builder-content').css('right') == '0px') ? 0 : mQuery('.builder-panel').width(),
+        spinnerLeft = (mQuery(window).width() - panelWidth - 60) / 2,
+        spinnerTop = (mQuery(window).height() - panelHeight - 60) / 2;
+    mQuery('<div id="builder-overlay" class="modal-backdrop fade in"><div style="position: absolute; top:' + spinnerTop + 'px; left:' + spinnerLeft + 'px" class="builder-spinner"><i class="fa fa-spinner fa-spin fa-5x"></i></div></div>')
+            .appendTo('#bee-plugin-container');
+    mQuery('#bee-plugin-container').show();
     mQuery('#emailform_template').val('mautic_code_mode');
     var request = function(method, url, data, type, callback) {
         var req = new XMLHttpRequest();
@@ -156,7 +162,6 @@ Mautic.launchBeeBuilder = function (token) {
     
     var initBeeeditor = function(token){
         var templatejson = mQuery('#bee-plugin-container').data('template');
-        mQuery('#bee-plugin-container').show();
         BeePlugin.create(token, beeConfig, function(beePluginInstance) {
             bee = beePluginInstance;
             if(templatejson){
@@ -179,7 +184,7 @@ Mautic.launchBeeBuilder = function (token) {
             url: mauticBaseUrl+'s/generatebeetoken',
             dataType: "json",
             success: function (response) {
-                console.log(response);
+                mQuery('#builder-overlay').remove();
                 if (typeof response.tokens !== 'undefined') {
                     // store the tokens to the session storage
                     beeConfig.tokenData = response.tokens;
@@ -187,7 +192,7 @@ Mautic.launchBeeBuilder = function (token) {
                 }
             },
             error: function (request, textStatus, errorThrown) {
-                
+                mQuery('#bee-plugin-container').hide();
             }
         });
     };
