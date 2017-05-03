@@ -163,6 +163,7 @@ Mautic.launchBeeBuilder = function (token) {
     };
     
     var initBeeeditor = function(token){
+        mQuery('#builder-overlay').remove();
         var templatejson = mQuery('#bee-plugin-container').data('template');
         BeePlugin.create(token, beeConfig, function(beePluginInstance) {
             bee = beePluginInstance;
@@ -186,7 +187,6 @@ Mautic.launchBeeBuilder = function (token) {
             url: mauticBaseUrl+'s/generatebeetoken',
             dataType: "json",
             success: function (response) {
-                mQuery('#builder-overlay').remove();
                 if (typeof response.tokens !== 'undefined') {
                     // store the tokens to the session storage
                     beeConfig.tokenData = response.tokens;
