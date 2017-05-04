@@ -23,7 +23,7 @@ class BeeTemplateHelper extends Helper
      */
     public function __construct(MauticFactory $factory)
     {
-        $this->locale     = $factory->getParameter('locale');
+        $this->locale     = $factory->getRequest()->getLocale();
         $this->beeUid     = $factory->getParameter('bee_uid');
         $this->authHelper = $factory->getHelper('bee.auth.helper');
     }
