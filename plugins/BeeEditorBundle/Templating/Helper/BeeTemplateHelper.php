@@ -43,6 +43,11 @@ class BeeTemplateHelper extends Helper
         return $this->authHelper->hasValidToken();
     }
 
+    public function getEncodedToken()
+    {
+        return json_encode($this->authHelper->getToken());
+    }
+
     /**
      * {@inheritdoc}
      */

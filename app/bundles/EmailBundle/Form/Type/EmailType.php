@@ -60,7 +60,7 @@ class EmailType extends AbstractType
         $this->timezoneChoices = FormFieldHelper::getTimezonesChoices();
         $this->localeChoices   = FormFieldHelper::getLocaleChoices();
         if ($factory->serviceExists('mautic.helper.bee.auth.helper')) {
-            $this->beeAuthToken = $factory->getHelper('bee.auth.helper')->getToken();
+            $this->beeAuthToken = $factory->getHelper('bee.auth.helper')->hasValidConfig();
         }
 
         $stages = $factory->getModel('stage')->getRepository()->getSimpleList();
@@ -455,14 +455,13 @@ class EmailType extends AbstractType
             ],
         ];
         if ($this->beeAuthToken) {
-            $encdedToken     = json_encode($this->beeAuthToken);
             $customButtons[] = [
                 'name'  => 'beebuilder',
                 'label' => 'mautic.core.beebuilder',
                 'attr'  => [
                     'class'   => 'btn btn-default btn-dnd btn-nospin text-primary btn-builder',
                     'icon'    => 'fa fa-cube',
-                    'onclick' => "Mautic.launchBeeBuilder({$encdedToken});",
+                    'onclick' => 'Mautic.launchBeeBuilder();',
                 ],
             ];
         }

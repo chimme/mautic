@@ -1,7 +1,7 @@
 var mergeTags = [];
 
 var beeConfig = {
-    uid: 'test1-clientside',
+    uid: '55hubs-template',
     container: 'bee-plugin-container',
     autosave: false,
     language: 'en-US',
@@ -34,11 +34,14 @@ var beeConfig = {
     });
 var bee = null;
 
-Mautic.launchBeeBuilder = function (token) {
+Mautic.launchBeeBuilder = function () {
+    if(typeof BEE_TOKEN === 'undefined'){
+        return; 
+    }
     beeConfig.uid = BEE_UID;
     beeConfig.language = BEE_LOCALE;
     if(mQuery.isEmptyObject(beeConfig.tokenData)){
-        beeConfig.tokenData = token;
+        beeConfig.tokenData = BEE_TOKEN;
     }
     var panelHeight = (mQuery('.builder-content').css('right') == '0px') ? mQuery('.builder-panel').height() : 0,
         panelWidth = (mQuery('.builder-content').css('right') == '0px') ? 0 : mQuery('.builder-panel').width(),

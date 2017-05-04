@@ -2,6 +2,7 @@
     <script type="text/javascript">
         var BEE_LOCALE = "<?php echo $view['bee_template']->getBeeLocale(); ?>";
         var BEE_UID = "<?php echo $view['bee_template']->getBeeUID(); ?>";
+        var BEE_TOKEN = <?php echo $view['bee_template']->getEncodedToken(); ?>;
     </script>
     <script src="https://app-rsrc.getbee.io/plugin/BeePlugin.js"></script>
     <div id="bee-plugin-container" data-template="<?php echo $view->escape($description) ?>"></div>

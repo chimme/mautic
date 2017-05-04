@@ -78,6 +78,9 @@ class BeeAuthHelper
      */
     public function generateCredentials($grant_type = 'password', $json_decode = 'object')
     {
+        if ($this->_token) {
+            return true;
+        }
         //set POST variables
         $fields = ['grant_type' => urlencode($grant_type), 'client_id' => urlencode($this->_client_id), 'client_secret' => urlencode($this->_client_secret)];
 
@@ -103,11 +106,7 @@ class BeeAuthHelper
         //close connection
         curl_close($ch);
 
-        if ($json_decode == 'array') {
-            return $this->_token = json_decode($result, true);
-        }
-
-        return $this->_token = json_decode($result);
+        return $this->_token = json_decode($result, true);
     }
 
     public function getToken()
@@ -115,11 +114,15 @@ class BeeAuthHelper
         if ($this->_client_id == null || $this->_client_secret == null) {
             return false;
         }
-        if ($this->_token == null) {
+        try {
             $this->generateCredentials();
+        } catch (\Exception $ex) {
+            $this->_token = ['error' => true];
+
+            return false;
         }
 
-        if ($this->_token && isset($this->_token->error)) {
+        if ($this->_token && isset($this->_token['error'])) {
             return false;
         }
 
@@ -134,5 +137,10 @@ class BeeAuthHelper
     public function getBeeLocale($locale)
     {
         return (isset($this->availableLocales[$locale])) ? $this->availableLocales[$locale] : $this->fallBackLocale;
+    }
+
+    public function hasValidConfig()
+    {
+        return $this->_client_id && $this->_client_secret;
     }
 }
