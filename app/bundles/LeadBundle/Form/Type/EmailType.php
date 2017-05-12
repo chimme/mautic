@@ -104,21 +104,6 @@ class EmailType extends AbstractType
 
         $builder->add('list', 'hidden');
 
-        $builder->add(
-            'templates',
-            'email_list',
-            [
-                'label'      => 'mautic.lead.email.template',
-                'label_attr' => ['class' => 'control-label'],
-                'required'   => false,
-                'attr'       => [
-                    'class'    => 'form-control',
-                    'onchange' => 'Mautic.getLeadEmailContent(this)',
-                ],
-                'multiple' => false,
-            ]
-        );
-
         $builder->add('buttons', 'form_buttons', [
             'apply_text'  => false,
             'save_text'   => 'mautic.email.send',
