@@ -120,4 +120,14 @@ Mautic.launchBeeBuilder = function () {
         initBeeeditor(beeConfig.tokenData);
     }
     
+    var initCancel = function(){
+        mQuery('<div style="position: absolute;top: 1px;right: -2px;"><a id="beditor_cancel_btn" class="btn"><i class="fa fa-times-circle fs-24 text-white"></i></a></div>')
+        .prependTo('#bee-plugin-container');
+        
+        mQuery('#beditor_cancel_btn').on('click',function(){         
+            mQuery('#bee-plugin-container').hide();
+            mQuery('#emailform_buttons_beebuilder_toolbar').children().removeClass('fa-spin fa-spinner').addClass('fa fa-cube');
+            mQuery('#bee-plugin-container').empty();
+        });
+    }();
 }

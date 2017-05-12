@@ -9,12 +9,14 @@
     <style>
         #bee-plugin-container {
             position: absolute;
-            top:5px;
+            top:0;
             bottom:30px;
-            left:5px;
-            right:5px;
+            left:0;
+            right:0;
             z-index: 9999;
             display: none;
+            background: rgba(0,0,0,.6);
+            padding: 20px;
         }
     </style>
 <?php endif; ?>
