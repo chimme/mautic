@@ -7,7 +7,7 @@ var beeConfig = {
     language: 'en-US',
     mergeTags: [],
     onSave: function (jsonFile, htmlFile) {
-        mQuery('#emailform_description').val(jsonFile);
+        mQuery('#emailform_beeTemplate').val(jsonFile);
         mQuery('.builder-html').val(htmlFile);
         mQuery('#bee-plugin-container').hide();
         mQuery('#emailform_buttons_beebuilder_toolbar').children().removeClass('fa-spin fa-spinner')
@@ -85,6 +85,10 @@ Mautic.launchBeeBuilder = function () {
             if(templatejson){
                 bee.start(templatejson);
             }else{
+              if(typeof BEE_DEFAULT_TEMPLATE !== 'undefined' && !mQuery.isEmptyObject(BEE_DEFAULT_TEMPLATE)){
+                  bee.start(BEE_DEFAULT_TEMPLATE);
+                  return true;
+              }
               request(
                 'GET', 
                 'https://rsrc.getbee.io/api/templates/m-bee',

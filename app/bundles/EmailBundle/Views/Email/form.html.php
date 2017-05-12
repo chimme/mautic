@@ -48,7 +48,7 @@ $templates = [
 $attr = $form->vars['attr'];
 
 $isCodeMode  = ($email->getTemplate() === 'mautic_code_mode');
-$description = ($email->getDescription()) ? $email->getDescription() : '';
+$beeTemplate = ($email->getBeeTemplate()) ? $email->getBeeTemplate() : '';
 
 ?>
 
@@ -245,7 +245,7 @@ $description = ($email->getDescription()) ? $email->getDescription() : '';
     <?php
     if ($view->exists('BeeEditorBundle:Helper:beebuilder.html.php')) {
         echo $view->render('BeeEditorBundle:Helper:beebuilder.html.php', [
-            'description' => $description,
+            'beeTemplate' => $beeTemplate,
         ]);
     }
 

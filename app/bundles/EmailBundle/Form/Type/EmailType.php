@@ -76,7 +76,7 @@ class EmailType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventSubscriber(new CleanFormSubscriber(['content' => 'html', 'customHtml' => 'html', 'description' => 'raw']));
+        $builder->addEventSubscriber(new CleanFormSubscriber(['content' => 'html', 'customHtml' => 'html', 'beeTemplate' => 'raw']));
         $builder->addEventSubscriber(new FormExitSubscriber('email.email', $options));
 
         $builder->add(
@@ -441,7 +441,7 @@ class EmailType extends AbstractType
 
         $builder->add('sessionId', 'hidden');
         $builder->add('emailType', 'hidden');
-        $builder->add('description', 'hidden');
+        $builder->add('beeTemplate', 'hidden');
 
         $customButtons = [
             [

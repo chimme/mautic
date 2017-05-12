@@ -48,6 +48,11 @@ class BeeTemplateHelper extends Helper
         return json_encode($this->authHelper->getToken());
     }
 
+    public function getDefaultTemplate()
+    {
+        return file_get_contents(__DIR__.'/../../Assets/BeeTemplates/default.json');
+    }
+
     /**
      * {@inheritdoc}
      */
