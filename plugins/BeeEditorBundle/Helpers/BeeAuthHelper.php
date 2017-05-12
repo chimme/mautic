@@ -98,6 +98,7 @@ class BeeAuthHelper
         curl_setopt($ch, CURLOPT_URL, $this->_auth_url);
         curl_setopt($ch, CURLOPT_POST, count($fields));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         //execute post
