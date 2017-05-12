@@ -39,7 +39,7 @@ class ConfigType extends AbstractType
                     'class' => 'form-control',
                 ],
             'constraints' => [
-                new \Symfony\Component\Validator\Constraints\Regex(['pattern' => '/^[a-zA-Z_-]+$/i']),
+                new \Symfony\Component\Validator\Constraints\Regex(['pattern' => '/^[a-zA-Z0-9_-]+$/i']),
             ],
         ]);
     }
