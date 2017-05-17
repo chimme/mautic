@@ -102,6 +102,7 @@
         "php-http/guzzle6-adapter": "^1.1",
         "sparkpost/sparkpost": "~2.0.3",
         "doctrine/data-fixtures": "1.2.1",
+        "facebook/php-ads-sdk": "^2.8",
         "cocur/slugify": "^2.3"
     },
     "require-dev": {
