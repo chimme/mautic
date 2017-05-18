@@ -2,14 +2,22 @@
 
 namespace MauticPlugin\BeeEditorBundle\Helpers;
 
+use Doctrine\ORM\EntityManager;
+use Mautic\PluginBundle\Helper\IntegrationHelper;
+use MauticPlugin\BeeEditorBundle\Integration\BeeEditorIntegration;
+
 class BeeAuthHelper
 {
+    //Your API Uid
+    private $_uid = null;
+
     //Your API Client ID
     private $_client_id = null;
 
     //Your API Client Secret
     private $_client_secret = null;
 
+    //token generated
     private $_token = null;
 
     //Url to call when authenicating
@@ -35,16 +43,67 @@ class BeeAuthHelper
 
     private $fallBackLocale = 'en-US';
 
+    protected $em;
+
+    protected $integrationHelper;
+
     /**
-     * The constructor.
-     *
-     * @param string $client_id     : The key provided by the api
-     * @param string $client_secret : The secret provided by the api
+     * @param EntityManager     $em
+     * @param IntegrationHelper $integrationHelper
      */
-    public function __construct($client_id = null, $client_secret = null)
+    public function __construct(EntityManager $em, IntegrationHelper $integrationHelper)
     {
-        $this->setClientID($client_id);
-        $this->setClientSecret($client_secret);
+        $this->em                = $em;
+        $this->integrationHelper = $integrationHelper;
+    }
+
+    /**
+     * @return type
+     */
+    public function getPluginIntegrationObject()
+    {
+        return $this->integrationHelper->getIntegrationObject(BeeEditorIntegration::PLUGIN_NAME);
+    }
+
+    /**
+     * check if bee editor plugin is published.
+     *
+     * @return bool
+     */
+    public function isPublished()
+    {
+        $plugin = $this->em->getRepository('MauticPluginBundle:Integration')
+                 ->findBy(['name' => BeeEditorIntegration::PLUGIN_NAME, 'isPublished' => true]);
+        if ($plugin) {
+            $authkeys = $this->getPluginIntegrationObject()->getKeys();
+            $this->setUid($authkeys['uid']);
+            $this->setClientID($authkeys['clientid']);
+            $this->setClientSecret($authkeys['clientsecret']);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Sets the uid that is provided by the API.
+     *
+     * @param string $_uid
+     */
+    public function setUid($uid)
+    {
+        $this->_uid = $uid;
+    }
+
+    /**
+     * Sets the client id that is provided by the API.
+     *
+     * @param string $_uid
+     */
+    public function getUid()
+    {
+        return $this->_uid ?? '55hubs-template';
     }
 
     /**
@@ -110,6 +169,11 @@ class BeeAuthHelper
         return $this->_token = json_decode($result, true);
     }
 
+    /**
+     * get API token.
+     *
+     * @return bool
+     */
     public function getToken()
     {
         if ($this->_client_id == null || $this->_client_secret == null) {
@@ -130,16 +194,29 @@ class BeeAuthHelper
         return $this->_token;
     }
 
+    /**
+     * @return type
+     */
     public function hasValidToken()
     {
         return ($this->getToken()) ? true : false;
     }
 
+    /**
+     * @param type $locale
+     *
+     * @return type
+     */
     public function getBeeLocale($locale)
     {
         return (isset($this->availableLocales[$locale])) ? $this->availableLocales[$locale] : $this->fallBackLocale;
     }
 
+    /**
+     * check for active configuration.
+     *
+     * @return type
+     */
     public function hasValidConfig()
     {
         return $this->_client_id && $this->_client_secret;

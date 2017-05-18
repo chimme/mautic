@@ -60,6 +60,7 @@ class EmailType extends AbstractType
         $this->timezoneChoices = FormFieldHelper::getTimezonesChoices();
         $this->localeChoices   = FormFieldHelper::getLocaleChoices();
         if ($factory->serviceExists('mautic.helper.bee.auth.helper')) {
+            $this->beePublished = $factory->getHelper('bee.auth.helper')->isPublished();
             $this->beeAuthToken = $factory->getHelper('bee.auth.helper')->hasValidConfig();
         }
 
@@ -454,7 +455,7 @@ class EmailType extends AbstractType
                 ],
             ],
         ];
-        if ($this->beeAuthToken) {
+        if ($this->beeAuthToken && $this->beePublished) {
             $customButtons[] = [
                 'name'  => 'beebuilder',
                 'label' => 'mautic.core.beebuilder',
