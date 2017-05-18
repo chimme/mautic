@@ -6,6 +6,14 @@ var beeConfig = {
     autosave: false,
     language: 'en-US',
     mergeTags: [],
+    editorFonts: {
+        showDefaultFonts: true,
+        customFonts: [{
+            name: "Lora",
+            fontFamily: "'Lora', serif",
+            url: "https://fonts.googleapis.com/css?family=Lora:i"
+        }]
+    },
     onSave: function (jsonFile, htmlFile) {
         mQuery('#emailform_beeTemplate').val(jsonFile);
         mQuery('.builder-html').val(htmlFile);
