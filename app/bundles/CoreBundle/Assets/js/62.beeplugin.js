@@ -87,11 +87,10 @@ Mautic.launchBeeBuilder = function () {
     
     var initBeeeditor = function(token){
         mQuery('#builder-overlay').remove();
-        var templatejson = mQuery('#bee-plugin-container').data('template');
         BeePlugin.create(token, beeConfig, function(beePluginInstance) {
             bee = beePluginInstance;
-            if(templatejson){
-                bee.start(templatejson);
+            if(typeof BEE_OLD_TEMPLATE != 'undefined'){
+                bee.start(BEE_OLD_TEMPLATE);
             }else{
               if(typeof BEE_DEFAULT_TEMPLATE !== 'undefined' && !mQuery.isEmptyObject(BEE_DEFAULT_TEMPLATE)){
                   bee.start(BEE_DEFAULT_TEMPLATE);

@@ -5,6 +5,8 @@
         var BEE_TOKEN = <?php echo $view['bee_template']->getEncodedToken(); ?>;
         <?php if ($beeTemplate == ''): ?>
         var BEE_DEFAULT_TEMPLATE = <?php echo $view['bee_template']->getDefaultTemplate(); ?>;
+        <?php else: ?>
+        var BEE_OLD_TEMPLATE = <?php echo $beeTemplate; ?>;
         <?php endif; ?>
     </script>
     <script src="https://app-rsrc.getbee.io/plugin/BeePlugin.js"></script>
