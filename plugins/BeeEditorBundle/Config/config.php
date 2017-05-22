@@ -18,6 +18,11 @@ return [
                 'alias'     => 'bee_template',
             ],
         ],
+        'events' => [
+            'hubs.beeeditor.email.subscriber' => [
+                'class' => 'MauticPlugin\BeeEditorBundle\EventListener\EmailSubscriber',
+            ],
+        ],
     ],
     'routes' => [
         'main' => [

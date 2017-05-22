@@ -125,7 +125,7 @@ Mautic.launchBeeBuilder = function () {
         });
     };
     
-    if((new Date(beeConfig.tokenData[".expires"]).getTime()/1000) - Math.floor(Date.now() / 1000) <= 0){
+    if((new Date(beeConfig.tokenData[".expires"]).getTime()/1000) - Math.floor(Date.now() / 1000) <= 15){
         generateToken();
     }else{
         initBeeeditor(beeConfig.tokenData);

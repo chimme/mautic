@@ -1,4 +1,9 @@
 <?php if ($view['bee_template']->hasValidToken()) : ?>
+<?php
+    if ($beeTemplate != '' && base64_decode($beeTemplate, true) !== false) {
+        $beeTemplate = base64_decode($beeTemplate);
+    }
+?>
     <script type="text/javascript">
         var BEE_LOCALE = "<?php echo $view['bee_template']->getBeeLocale(); ?>";
         var BEE_UID = "<?php echo $view['bee_template']->getBeeUID(); ?>";
