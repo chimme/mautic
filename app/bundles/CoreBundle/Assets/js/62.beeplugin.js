@@ -18,7 +18,8 @@ var beeConfig = {
         mQuery('#emailform_beeTemplate').val(jsonFile);
         mQuery('.builder-html').val(htmlFile);
         mQuery('#bee-plugin-container').hide();
-        mQuery('#emailform_buttons_beebuilder_toolbar').children().removeClass('fa-spin fa-spinner')
+        mQuery('#emailform_buttons_beebuilder_toolbar').children().removeClass('fa-spin fa-spinner');
+        Mautic.autoGeneratePlaintext();
     },
     onSaveAsTemplate: function (jsonFile) { // + thumbnail? 
         save('newsletter-template.json', jsonFile);
