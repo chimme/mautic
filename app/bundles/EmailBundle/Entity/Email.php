@@ -1070,6 +1070,10 @@ class Email extends FormEntity implements VariantEntityInterface, TranslationEnt
      */
     public function getBeeTemplate()
     {
+        if ($this->beeTemplate != '' && base64_decode($this->beeTemplate, true) !== false) {
+            return base64_decode($this->beeTemplate);
+        }
+
         return $this->beeTemplate;
     }
 

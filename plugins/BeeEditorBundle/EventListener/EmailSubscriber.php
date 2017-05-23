@@ -23,7 +23,7 @@ class EmailSubscriber extends CommonSubscriber
     {
         $email       = $event->getEmail();
         $beeTemplate = $email->getBeeTemplate();
-        $beeTemplate = !empty($beeTemplate) ? base64_encode($beeTemplate) : '';
+        $beeTemplate = (!empty($beeTemplate) && base64_decode($beeTemplate, true) === false) ? base64_encode($beeTemplate) : $beeTemplate;
         $email->setBeeTemplate($beeTemplate);
     }
 }

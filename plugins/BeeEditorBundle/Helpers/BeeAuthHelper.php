@@ -176,7 +176,7 @@ class BeeAuthHelper
      */
     public function getToken()
     {
-        if ($this->_client_id == null || $this->_client_secret == null) {
+        if (!$this->isPublished()) {
             return false;
         }
         try {
