@@ -173,6 +173,11 @@ class Email extends FormEntity implements VariantEntityInterface, TranslationEnt
      */
     private $sessionId;
 
+    /**
+     * @var string
+     */
+    private $beeTemplate;
+
     public function __clone()
     {
         $this->id               = null;
@@ -222,6 +227,10 @@ class Email extends FormEntity implements VariantEntityInterface, TranslationEnt
             ->addLifecycleEvent('cleanUrlsInContent', Events::prePersist);
 
         $builder->addIdColumns();
+        $builder->createField('beeTemplate', 'text')
+                ->columnName('bee_template')
+                ->nullable()
+                ->build();
         $builder->createField('subject', 'text')
             ->nullable()
             ->build();
@@ -1054,5 +1063,29 @@ class Email extends FormEntity implements VariantEntityInterface, TranslationEnt
                 $content = str_replace($url, $newUrl, $content);
             }
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBeeTemplate()
+    {
+        if ($this->beeTemplate != '' && base64_decode($this->beeTemplate, true) !== false) {
+            return base64_decode($this->beeTemplate);
+        }
+
+        return $this->beeTemplate;
+    }
+
+    /**
+     * @param mixed $beeTemplate
+     *
+     * @return Email
+     */
+    public function setBeeTemplate($beeTemplate)
+    {
+        $this->beeTemplate = $beeTemplate;
+
+        return $this;
     }
 }

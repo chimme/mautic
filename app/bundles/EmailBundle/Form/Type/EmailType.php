@@ -43,6 +43,7 @@ class EmailType extends AbstractType
     private $timezoneChoices = [];
     private $stageChoices    = [];
     private $localeChoices   = [];
+    private $beeAuthToken    = null;
 
     /**
      * @param MauticFactory $factory
@@ -58,6 +59,10 @@ class EmailType extends AbstractType
         $this->regionChoices   = FormFieldHelper::getRegionChoices();
         $this->timezoneChoices = FormFieldHelper::getTimezonesChoices();
         $this->localeChoices   = FormFieldHelper::getLocaleChoices();
+        if ($factory->serviceExists('mautic.helper.bee.auth.helper')) {
+            $this->beePublished = $factory->getHelper('bee.auth.helper')->isPublished();
+            $this->beeAuthToken = $factory->getHelper('bee.auth.helper')->hasValidConfig();
+        }
 
         $stages = $factory->getModel('stage')->getRepository()->getSimpleList();
 
@@ -72,7 +77,7 @@ class EmailType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventSubscriber(new CleanFormSubscriber(['content' => 'html', 'customHtml' => 'html']));
+        $builder->addEventSubscriber(new CleanFormSubscriber(['content' => 'html', 'customHtml' => 'html', 'beeTemplate' => 'raw']));
         $builder->addEventSubscriber(new FormExitSubscriber('email.email', $options));
 
         $builder->add(
@@ -437,6 +442,7 @@ class EmailType extends AbstractType
 
         $builder->add('sessionId', 'hidden');
         $builder->add('emailType', 'hidden');
+        $builder->add('beeTemplate', 'hidden');
 
         $customButtons = [
             [
@@ -449,6 +455,17 @@ class EmailType extends AbstractType
                 ],
             ],
         ];
+        if ($this->beeAuthToken && $this->beePublished) {
+            $customButtons[] = [
+                'name'  => 'beebuilder',
+                'label' => 'mautic.core.beebuilder',
+                'attr'  => [
+                    'class'   => 'btn btn-default btn-dnd btn-nospin text-primary btn-builder',
+                    'icon'    => 'fa fa-cube',
+                    'onclick' => 'Mautic.launchBeeBuilder();',
+                ],
+            ];
+        }
 
         if (!empty($options['update_select'])) {
             $builder->add(
