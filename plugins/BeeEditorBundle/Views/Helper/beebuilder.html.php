@@ -20,7 +20,7 @@
         #bee-plugin-container {
             position: absolute;
             top:0;
-            bottom:30px;
+            bottom:0;
             left:0;
             right:0;
             z-index: 9999;
