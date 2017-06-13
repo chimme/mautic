@@ -17,9 +17,10 @@ var beeConfig = {
     onSave: function (jsonFile, htmlFile) {
         mQuery('#emailform_beeTemplate').val(jsonFile);
         mQuery('.builder-html').val(htmlFile);
-        mQuery('#bee-plugin-container').hide();
+        mQuery('#'+beeConfig.container).hide();
         mQuery('#emailform_buttons_beebuilder_toolbar').children().removeClass('fa-spin fa-spinner');
         Mautic.autoGeneratePlaintext();
+        mQuery('body.header-fixed').css('overflow','');
     },
     onSaveAsTemplate: function (jsonFile) { // + thumbnail? 
         save('newsletter-template.json', jsonFile);
@@ -49,17 +50,30 @@ Mautic.launchBeeBuilder = function () {
     }
     beeConfig.uid = BEE_UID;
     beeConfig.language = BEE_LOCALE;
+    beeConfig.resizeEditor = function(){
+        mQuery('#'+beeConfig.container).css({'height':mQuery(window).height()+'px','width':mQuery(window).width()+'px'});
+        mQuery('#'+beeConfig.container+' iframe').css('min-width',mQuery(window).width()-40+'px');
+    };
+    
     if(mQuery.isEmptyObject(beeConfig.tokenData)){
         beeConfig.tokenData = BEE_TOKEN;
     }
+    
+    beeConfig.resizeEditor();
+    mQuery( window ).resize(function() {
+        beeConfig.resizeEditor();
+    });
+    
     var panelHeight = (mQuery('.builder-content').css('right') == '0px') ? mQuery('.builder-panel').height() : 0,
         panelWidth = (mQuery('.builder-content').css('right') == '0px') ? 0 : mQuery('.builder-panel').width(),
         spinnerLeft = (mQuery(window).width() - panelWidth - 60) / 2,
         spinnerTop = (mQuery(window).height() - panelHeight - 60) / 2;
     mQuery('<div id="builder-overlay" class="modal-backdrop fade in"><div style="position: absolute; top:' + spinnerTop + 'px; left:' + spinnerLeft + 'px" class="builder-spinner"><i class="fa fa-spinner fa-spin fa-5x"></i></div></div>')
-            .appendTo('#bee-plugin-container');
-    mQuery('#bee-plugin-container').show();
+            .appendTo('#'+beeConfig.container);    
+    mQuery('body.header-fixed').css('overflow','hidden');    
+    mQuery('#'+beeConfig.container).show();
     mQuery('#emailform_template').val('mautic_code_mode');
+        
     var request = function(method, url, data, type, callback) {
         var req = new XMLHttpRequest();
         req.onreadystatechange = function() {
@@ -121,7 +135,7 @@ Mautic.launchBeeBuilder = function () {
                 }
             },
             error: function (request, textStatus, errorThrown) {
-                mQuery('#bee-plugin-container').hide();
+                mQuery('#'+beeConfig.container).hide();
             }
         });
     };
@@ -134,12 +148,13 @@ Mautic.launchBeeBuilder = function () {
     
     var initCancel = function(){
         mQuery('<div style="position: absolute;top: 1px;right: -2px;"><a id="beditor_cancel_btn" class="btn"><i class="fa fa-times-circle fs-24 text-white"></i></a></div>')
-        .prependTo('#bee-plugin-container');
+        .prependTo('#'+beeConfig.container);
         
         mQuery('#beditor_cancel_btn').on('click',function(){         
-            mQuery('#bee-plugin-container').hide();
+            mQuery('#'+beeConfig.container).hide();
             mQuery('#emailform_buttons_beebuilder_toolbar').children().removeClass('fa-spin fa-spinner').addClass('fa fa-cube');
-            mQuery('#bee-plugin-container').empty();
+            mQuery('#'+beeConfig.container).empty();
+            mQuery('body.header-fixed').css('overflow','');
         });
     }();
 }
