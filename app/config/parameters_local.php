@@ -1,5 +1,5 @@
 <?php
 
-$parameters = array(
+$parameters = [
     'batch_sleep_time' => 0,
-);
+];

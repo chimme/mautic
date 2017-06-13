@@ -145,11 +145,11 @@ if (count($items)):
                                 <?php endif; ?>
                             </a>
                         </div>
-                        <?php if ($description = $item->getDescription()): ?>
+                        <?php /* if ($description = $item->getDescription()): ?>
                             <div class="text-muted mt-4">
                                 <small><?php echo $description; ?></small>
                             </div>
-                        <?php endif; ?>
+                        <?php endif;*/ ?>
                     </td>
                     <td class="visible-md visible-lg">
                         <?php $category = $item->getCategory(); ?>
