@@ -56,5 +56,8 @@
             -webkit-transform: none !important;
             -ms-transform: none !important;
         }
+        div.talkus-button.talkus-active{
+            display: none;
+        }
     </style>
 </head>
