@@ -48,7 +48,12 @@
             id: '<?php echo is_object($app->getUser()) ? $app->getUser()->getUsername() : ''; ?>',
             name: '<?php echo is_object($app->getUser()) ? $app->getUser()->getName() : ''; ?>',
             email: '<?php echo is_object($app->getUser()) ? $app->getUser()->getEmail() : ''; ?>'
-        })
+        });        
+        talkus('callback', function(name, param) {
+            if ( name=='notification' && parseInt(param)>0 ) {
+                document.querySelector("div.talkus-button").style.display = 'block';
+            }
+        });        
     </script>
     <style>
         div.talkus-plugin.talkus-active.talkus-minimized {
