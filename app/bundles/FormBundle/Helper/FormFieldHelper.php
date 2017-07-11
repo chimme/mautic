@@ -49,6 +49,7 @@ class FormFieldHelper extends AbstractFormFieldHelper
         'checkboxgrp' => [],
         'country'     => [],
         'date'        => [],
+        'datetime'    => [],
         'email'       => [
             'filter'      => 'email',
             'constraints' => [
@@ -56,6 +57,7 @@ class FormFieldHelper extends AbstractFormFieldHelper
             ],
         ],
         'freetext' => [],
+        'freehtml' => [],
         'hidden'   => [],
         'number'   => [
             'filter' => 'float',
@@ -220,9 +222,12 @@ class FormFieldHelper extends AbstractFormFieldHelper
                 }
                 break;
             case 'checkboxgrp':
-                if (!is_array($value)) {
+                if (is_string($value) && strrpos($value, '|') > 0) {
+                    $value = explode('|', $value);
+                } elseif (!is_array($value)) {
                     $value = [$value];
                 }
+
                 foreach ($value as $val) {
                     $val = urldecode($val);
                     if (preg_match(
@@ -243,6 +248,20 @@ class FormFieldHelper extends AbstractFormFieldHelper
                         .' checked />';
                     $formHtml = str_replace($match[0], $replace, $formHtml);
                 }
+                break;
+            case 'select':
+            case 'country':
+                $regex = '/<select\s*id="mauticform_input_'.$formName.'_'.$alias.'"(.*?)<\/select>/is';
+                if (preg_match($regex, $formHtml, $match)) {
+                    $origText = $match[0];
+                    $replace  = str_replace(
+                        '<option value="'.urldecode($value).'">',
+                        '<option value="'.urldecode($value).'" selected="selected">',
+                        $origText
+                    );
+                    $formHtml = str_replace($origText, $replace, $formHtml);
+                }
+
                 break;
         }
     }

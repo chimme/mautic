@@ -12,6 +12,7 @@
 namespace Mautic\ConfigBundle\Event;
 
 use Mautic\CoreBundle\Event\CommonEvent;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
@@ -38,6 +39,11 @@ class ConfigEvent extends CommonEvent
      * @var array
      */
     private $errors = [];
+
+    /**
+     * @var array
+     */
+    private $fieldErrors = [];
 
     /**
      * @param array        $config
@@ -122,9 +128,24 @@ class ConfigEvent extends CommonEvent
      * @param string $message     (untranslated)
      * @param array  $messageVars for translation
      */
-    public function setError($message, $messageVars = [])
+    public function setError($message, $messageVars = [], $key = null, $field = null)
     {
+        if (!empty($key) && !empty($field)) {
+            if (!isset($this->errors[$key])) {
+                $this->fieldErrors[$key] = [];
+            }
+
+            $this->fieldErrors[$key][$field] = [
+                $message,
+                $messageVars,
+            ];
+
+            return $this;
+        }
+
         $this->errors[$message] = $messageVars;
+
+        return $this;
     }
 
     /**
@@ -138,25 +159,34 @@ class ConfigEvent extends CommonEvent
     }
 
     /**
-     * @param $value
-     *
-     * @return mixed|string
+     * @return array
      */
-    public function escapeString($value)
+    public function getFieldErrors()
     {
-        // Prevent symfony for failing due to percent signs
-        if (is_string($value) && strpos($value, '%') !== false) {
-            $value = urldecode($value);
+        return $this->fieldErrors;
+    }
 
-            if (preg_match_all('/([^%]|^)(%{1}[^%]+[^%]%{1})([^%]|$)/i', $value, $matches)) {
-                // Encode any left over to prevent Symfony from crashing
-                foreach ($matches[0] as $matchKey => $match) {
-                    $replaceWith = $matches[1][$matchKey].'%'.$matches[2][$matchKey].'%'.$matches[3][$matchKey];
-                    $value       = str_replace($match, $replaceWith, $value);
-                }
-            }
-        }
+    /**
+     * @param UploadedFile $file
+     *
+     * @return string
+     */
+    public function getFileContent(UploadedFile $file)
+    {
+        $tmpFile = $file->getRealPath();
+        $content = trim(file_get_contents($tmpFile));
+        @unlink($tmpFile);
 
-        return $value;
+        return $content;
+    }
+
+    /**
+     * @param $content
+     *
+     * @return string
+     */
+    public function encodeFileContents($content)
+    {
+        return base64_encode($content);
     }
 }

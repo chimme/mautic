@@ -14,6 +14,7 @@ namespace Mautic\EmailBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Mautic\ApiBundle\Serializer\Driver\ApiMetadataDriver;
 use Mautic\AssetBundle\Entity\Asset;
 use Mautic\CoreBundle\Doctrine\Mapping\ClassMetadataBuilder;
@@ -90,6 +91,11 @@ class Email extends FormEntity implements VariantEntityInterface, TranslationEnt
      * @var array
      */
     private $content = [];
+
+    /**
+     * @var array
+     */
+    private $utmTags = [];
 
     /**
      * @var string
@@ -260,6 +266,11 @@ class Email extends FormEntity implements VariantEntityInterface, TranslationEnt
             ->build();
 
         $builder->createField('content', 'array')
+            ->nullable()
+            ->build();
+
+        $builder->createField('utmTags', 'array')
+            ->columnName('utm_tags')
             ->nullable()
             ->build();
 
@@ -443,6 +454,7 @@ class Email extends FormEntity implements VariantEntityInterface, TranslationEnt
                     'fromName',
                     'replyToAddress',
                     'bccAddress',
+                    'utmTags',
                     'customHtml',
                     'plainText',
                     'template',
@@ -579,6 +591,25 @@ class Email extends FormEntity implements VariantEntityInterface, TranslationEnt
 
         $this->isChanged('content', $content);
         $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUtmTags()
+    {
+        return $this->utmTags;
+    }
+
+    /**
+     * @param array $utmTags
+     */
+    public function setUtmTags($utmTags)
+    {
+        $this->isChanged('utmTags', $utmTags);
+        $this->utmTags = $utmTags;
 
         return $this;
     }
@@ -850,7 +881,7 @@ class Email extends FormEntity implements VariantEntityInterface, TranslationEnt
     }
 
     /**
-     * @return mixed
+     * @return PersistentCollection
      */
     public function getLists()
     {
@@ -1062,6 +1093,20 @@ class Email extends FormEntity implements VariantEntityInterface, TranslationEnt
 
                 $content = str_replace($url, $newUrl, $content);
             }
+        }
+    }
+
+    /**
+     * Calculate Read Percentage for each Email.
+     *
+     * @return int
+     */
+    public function getReadPercentage($includevariants = false)
+    {
+        if ($this->getSentCount($includevariants) > 0) {
+            return round($this->getReadCount($includevariants) / ($this->getSentCount($includevariants)) * 100, 2);
+        } else {
+            return 0;
         }
     }
 

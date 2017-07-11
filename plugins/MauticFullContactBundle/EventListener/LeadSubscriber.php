@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @copyright   2016 Mautic Contributors. All rights reserved
  * @author      Mautic, Inc.
@@ -30,8 +31,6 @@ class LeadSubscriber extends CommonSubscriber
      */
     public function __construct(LookupHelper $lookupHelper)
     {
-        parent::__construct();
-
         $this->lookupHelper = $lookupHelper;
     }
 
