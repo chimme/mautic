@@ -1,6 +1,7 @@
 <?php
-/**
- * @copyright   2014 Mautic Contributors. All rights reserved
+
+/*
+ * @copyright  2014 Mautic Contributors. All rights reserved
  * @author      Mautic
  *
  * @link        http://mautic.org
@@ -63,6 +64,14 @@ return [
                     'monolog.logger.mautic',
                     'mautic.lead.model.lead',
                     'mautic.lead.model.company',
+                ],
+            ],
+        ],
+        'integrations' => [
+            'mautic.integration.clearbit' => [
+                'class'     => \MauticPlugin\MauticClearbitBundle\Integration\ClearbitIntegration::class,
+                'arguments' => [
+
                 ],
             ],
         ],

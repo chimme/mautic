@@ -26,7 +26,7 @@ class CategoryRepository extends CommonRepository
      *
      * @return Paginator
      */
-    public function getEntities($args = [])
+    public function getEntities(array $args = [])
     {
         $q = $this
             ->createQueryBuilder('c')
@@ -84,12 +84,12 @@ class CategoryRepository extends CommonRepository
     }
 
     /**
-     * @param QueryBuilder $q
-     * @param              $filter
+     * @param \Doctrine\ORM\QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder $q
+     * @param                                                              $filter
      *
      * @return array
      */
-    protected function addCatchAllWhereClause(&$q, $filter)
+    protected function addCatchAllWhereClause($q, $filter)
     {
         return $this->addStandardCatchAllWhereClause($q, $filter, [
             'c.title',
@@ -98,25 +98,27 @@ class CategoryRepository extends CommonRepository
     }
 
     /**
-     * @param QueryBuilder $q
-     * @param              $filter
+     * @param \Doctrine\ORM\QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder $q
+     * @param                                                              $filter
      *
      * @return array
      */
-    protected function addSearchCommandWhereClause(&$q, $filter)
+    protected function addSearchCommandWhereClause($q, $filter)
     {
-        $command = $field = $filter->command;
-        $unique  = $this->generateRandomParameterName();
-        $expr    = false;
+        $command                 = $field                 = $filter->command;
+        $unique                  = $this->generateRandomParameterName();
+        list($expr, $parameters) = parent::addSearchCommandWhereClause($q, $filter);
 
         switch ($command) {
             case $this->translator->trans('mautic.core.searchcommand.ispublished'):
-                $expr   = $q->expr()->eq('c.isPublished', ":$unique");
-                $string = true;
+            case $this->translator->trans('mautic.core.searchcommand.ispublished', [], null, 'en_US'):
+                $expr                = $q->expr()->eq('c.isPublished', ":$unique");
+                $parameters[$unique] = true;
                 break;
             case $this->translator->trans('mautic.core.searchcommand.isunpublished'):
-                $expr   = $q->expr()->eq('c.isPublished', ":$unique");
-                $string = false;
+            case $this->translator->trans('mautic.core.searchcommand.isunpublished', [], null, 'en_US'):
+                $expr                = $q->expr()->eq('c.isPublished', ":$unique");
+                $parameters[$unique] = false;
                 break;
         }
 
@@ -126,7 +128,7 @@ class CategoryRepository extends CommonRepository
 
         return [
             $expr,
-            ["$unique" => $string],
+            $parameters,
         ];
     }
 
@@ -135,10 +137,12 @@ class CategoryRepository extends CommonRepository
      */
     public function getSearchCommands()
     {
-        return [
+        $commands = [
             'mautic.core.searchcommand.ispublished',
             'mautic.core.searchcommand.isunpublished',
         ];
+
+        return array_merge($commands, parent::getSearchCommands());
     }
 
     /**

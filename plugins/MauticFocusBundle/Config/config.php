@@ -17,10 +17,6 @@ return [
 
     'routes' => [
         'main' => [
-            'mautic_focus_pagetoken_index' => [
-                'path'       => '/focus/pagetokens/{page}',
-                'controller' => 'MauticFocusBundle:SubscribedEvents\BuilderToken:index',
-            ],
             'mautic_focus_index' => [
                 'path'       => '/focus/{page}',
                 'controller' => 'MauticFocusBundle:Focus:index',
@@ -38,6 +34,19 @@ return [
             'mautic_focus_pixel' => [
                 'path'       => '/focus/{id}/viewpixel.gif',
                 'controller' => 'MauticFocusBundle:Public:viewPixel',
+            ],
+        ],
+        'api' => [
+            'mautic_api_focusstandard' => [
+                'standard_entity' => true,
+                'name'            => 'focus',
+                'path'            => '/focus',
+                'controller'      => 'MauticFocusBundle:Api\FocusApi',
+            ],
+            'mautic_api_focusjs' => [
+                'path'       => '/focus/{id}/js',
+                'controller' => 'MauticFocusBundle:Api\FocusApi:generateJs',
+                'method'     => 'POST',
             ],
         ],
     ],
@@ -69,6 +78,11 @@ return [
                     'router',
                     'mautic.helper.ip_lookup',
                     'mautic.core.model.auditlog',
+                    'mautic.page.model.trackable',
+                    'mautic.page.helper.token',
+                    'mautic.asset.helper.token',
+                    'mautic.form.helper.token',
+                    'mautic.focus.model.focus',
                 ],
             ],
             'mautic.focus.stats.subscriber' => [
@@ -108,6 +122,17 @@ return [
                     'mautic.form.model.form',
                     'mautic.page.model.trackable',
                     'mautic.helper.templating',
+                    'event_dispatcher',
+                    'mautic.lead.model.lead',
+                ],
+            ],
+        ],
+        'other' => [
+            'mautic.focus.helper.token' => [
+                'class'     => 'MauticPlugin\MauticFocusBundle\Helper\TokenHelper',
+                'arguments' => [
+                    'mautic.focus.model.focus',
+                    'router',
                 ],
             ],
         ],
@@ -116,9 +141,10 @@ return [
     'menu' => [
         'main' => [
             'mautic.focus' => [
-                'route'  => 'mautic_focus_index',
-                'access' => 'plugin:focus:items:view',
-                'parent' => 'mautic.core.channels',
+                'route'    => 'mautic_focus_index',
+                'access'   => 'plugin:focus:items:view',
+                'parent'   => 'mautic.core.channels',
+                'priority' => 10,
             ],
         ],
     ],

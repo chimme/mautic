@@ -68,6 +68,13 @@ $template  = '<div class="col-md-6">{content}</div>';
             </div>
 
             <?php if (isset($fields['mailer_transport'])): ?>
+                <div class="row">
+                    <?php echo $view['form']->rowIfExists($fields, 'mailer_mailjet_sandbox', $template); ?>
+                    <?php echo $view['form']->rowIfExists($fields, 'mailer_mailjet_sandbox_default_mail', $template); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($fields['mailer_transport'])): ?>
                 <hr class="text-muted" />
             <?php endif; ?>
 
@@ -127,14 +134,12 @@ $template  = '<div class="col-md-6">{content}</div>';
     <div class="panel-body">
         <div class="row">
             <?php echo $view['form']->rowIfExists($fields, 'webview_text', $template); ?>
-        </div>
-
-        <div class="row">
             <?php echo $view['form']->rowIfExists($fields, 'default_signature_text', $template); ?>
         </div>
         <div class="row">
             <?php echo $view['form']->rowIfExists($fields, 'mailer_append_tracking_pixel', $template); ?>
             <?php echo $view['form']->rowIfExists($fields, 'mailer_convert_embed_images', $template); ?>
+            <?php echo $view['form']->rowIfExists($fields, 'disable_trackable_urls', $template); ?>
         </div>
     </div>
 </div>

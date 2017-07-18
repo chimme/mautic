@@ -297,6 +297,8 @@ $view['slots']->set(
                         </a>
                     </li>
                 <?php endif; ?>
+                
+                <?php echo $view['content']->getCustomContent('tabs', $mauticTemplateVars); ?>
             </ul>
             <!--/ tabs controls -->
         </div>
@@ -336,7 +338,11 @@ $view['slots']->set(
                 </div>
             <?php endif; ?>
             <!--/ #social-container -->
-
+            
+            <!-- custom content -->
+            <?php echo $view['content']->getCustomContent('tabs.content', $mauticTemplateVars); ?>
+            <!-- end: custom content -->
+            
             <!-- #place-container -->
             <?php if ($places): ?>
                 <div class="tab-pane fade bdr-w-0" id="place-container">
@@ -471,6 +477,13 @@ $view['slots']->set(
                 <div class="panel-body pt-sm">
                     <ul class="media-list media-list-feed">
                         <?php foreach ($upcomingEvents as $event) : ?>
+                        <?php
+                            $metadata = unserialize($event['metadata']);
+                            $errors   = false;
+                            if (!empty($metadata['errors'])):
+                                $errors = (is_array($metadata['errors'])) ? implode('<br />', $metadata['errors']) : $metadata['errors'];
+                            endif;
+                        ?>
                             <li class="media">
                                 <div class="media-object pull-left mt-xs">
                                     <span class="figure"></span>
@@ -484,7 +497,10 @@ $view['slots']->set(
                                         'mautic.lead.lead.upcoming.event.triggered.at',
                                         ['%event%' => $event['event_name'], '%link%' => $link]
                                     ); ?>
-                                    <p class="fs-12 dark-sm"><?php echo $view['date']->toFull($event['trigger_date']); ?></p>
+                                    <?php if (!empty($errors)): ?>
+                                    <i class="fa fa-warning text-danger" data-toggle="tooltip" title="<?php echo $errors; ?>"></i>
+                                    <?php endif; ?>
+                                    <p class="fs-12 dark-sm timeline-campaign-event-date-<?php echo $event['event_id']; ?>"><?php echo $view['date']->toFull($event['trigger_date'], 'utc'); ?></p>
                                 </div>
                             </li>
                         <?php endforeach; ?>

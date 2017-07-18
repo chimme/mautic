@@ -218,10 +218,15 @@ class InputHelper
             $allowedCharacters[] = $convertSpacesTo;
         }
 
+        $delimiter = '~';
+        if (false && in_array($delimiter, $allowedCharacters)) {
+            $delimiter = '#';
+        }
+
         if (!empty($allowedCharacters)) {
-            $regex = '/[^0-9a-z'.implode('', $allowedCharacters).']+/i';
+            $regex = $delimiter.'[^0-9a-z'.preg_quote(implode('', $allowedCharacters)).']+'.$delimiter.'i';
         } else {
-            $regex = '/[^0-9a-z]+/i';
+            $regex = $delimiter.'[^0-9a-z]+'.$delimiter.'i';
         }
 
         return trim(preg_replace($regex, '', $value));
@@ -286,7 +291,7 @@ class InputHelper
         $value = filter_var($value, FILTER_SANITIZE_URL);
         $parts = parse_url($value);
 
-        if ($parts) {
+        if ($parts && !empty($parts['path'])) {
             if (isset($parts['scheme'])) {
                 if (!in_array($parts['scheme'], $allowedProtocols)) {
                     $parts['scheme'] = $defaultProtocol;
@@ -388,7 +393,7 @@ class InputHelper
 
             // Slecial handling for XML tags used in Outlook optimized emails <o:*/> and <w:/>
             $value = preg_replace_callback(
-                "/<\/*[o|w]:[^>]*>/is",
+                "/<\/*[o|w|v]:[^>]*>/is",
                 function ($matches) {
                     return '<mencoded>'.htmlspecialchars($matches[0]).'</mencoded>';
                 },
