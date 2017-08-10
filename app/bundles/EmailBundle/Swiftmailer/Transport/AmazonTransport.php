@@ -262,8 +262,6 @@ class AmazonTransport extends AbstractTokenHttpTransport implements InterfaceCal
      */
     public function processJsonPayload(array $payload, $logger, $translator)
     {
-
-        //echo("HTTP client: ".$this->httpClient."\n");
         // Data structure that Mautic expects to be returned from this callback
         $rows = [
             DoNotContact::BOUNCED => [

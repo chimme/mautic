@@ -70,7 +70,7 @@ PAYLOAD;
         $jsonPayload = json_decode($payload, true);
 
         $transport = new AmazonTransport($mockHttp);
-        $transport->processJsonPayload($jsonPayload, $logger, $translator, $mockHttp);
+        $transport->processJsonPayload($jsonPayload, $logger, $translator);
     }
 
     /**
